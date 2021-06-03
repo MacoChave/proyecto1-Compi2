@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Compiladores</title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<ul class="nav justify-content-center">
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					data-bs-toggle="dropdown"
+					href="#"
+					role="button"
+					aria-expanded="false"
+					>Archivo</a
+				>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item">Nuevo archivo</a></li>
+					<li><a class="dropdown-item">
+            <label for="openFile">Abrir archivo</label>
+            <input type="file" name="openFile" id="openFile" hidden>
+          </a></li>
+					<li><a class="dropdown-item">Guardar archivo</a></li>
+				</ul>
+			</li>
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					data-bs-toggle="dropdown"
+					href="#"
+					role="button"
+					aria-expanded="false"
+					>Analisis</a
+				>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" id="analizeCode">Analizar</a></li>
+					<li><a class="dropdown-item" id="compileCode">Compilar</a></li>
+				</ul>
+			</li>
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					data-bs-toggle="dropdown"
+					href="#"
+					role="button"
+					aria-expanded="false"
+					>Resultados</a
+				>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item">Tabla de error</a></li>
+					<li><a class="dropdown-item">Árbol sintáctico</a></li>
+				</ul>
+			</li>
+		</ul>
+    </div>
+    <div class="container">
+      <div class="col">
+        <div class="codeBox">
+          <pre class="form-control" name="code" id="codeBlock" contenteditable="true"></pre>
+        </div>
+      </div>
+      <div class="col">
+          <textarea
+              class="form-control"
+              name="console"
+              id="console"
+              cols="30"
+              rows="6"
+              readonly
+              wrap="hard"
+              >
+          </textarea>
+			</div>
+		</div>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+			crossorigin="anonymous"
+		></script>
+    <script src="javascripts/editor.js"></script>
+    <script src="javascripts/compiler.js"></script>
+	</body>
+	</body>
+</html>
