@@ -1,13 +1,20 @@
 "use strict";
-analizeCode.addEventListener('click', () => {
+const xmlGrammarAsc = requiere('./xml/Grammar/xmlGrammarAsc');
+analizeXML.addEventListener('click', () => {
     // ANALIZAR XML
     console.log(codeBlock.textContent);
 });
-sendXPath.addEventListener('click', () => {
+analizeXPath.addEventListener('click', () => {
     // ANALIZAR XPATH
-    console.log(codeXPath.value);
+    let input = codeXPath.value;
+    const elements = xmlGrammarAsc.parse(input);
+    console.log(elements);
 });
-compileCode.addEventListener('click', () => {
+compileXML.addEventListener('click', () => {
     // COMPILAR XPATH
-    console.log('compileCode was clicked');
+    console.log('compile xml was clicked');
+});
+compileXPATH.addEventListener('click', () => {
+    // COMPILAR XPATH
+    console.log('compile xpath was clicked');
 });
