@@ -4,16 +4,22 @@ import { Instruccion } from "./Interfaces/Instruccion";
 
 const gramatica = require('./Gramatica/gramatica');
 
-function ejecutarCodigo(entrada: string) {
-    const objetos = gramatica.parse(entrada);
-    const entornoGlobal: Entorno = new Entorno(null);
-    //const ast:AST = new AST(instrucciones);
-    //instrucciones.forEach((element:Instruccion) => {
-    //    element.ejecutar(entornoGlobal,ast);
-    //});
+export class Main {
+    ejecutarCodigo(entrada: string) {
+        const objetos = gramatica.parse(entrada);
+        const entornoGlobal: Entorno = new Entorno(null);
+        //const ast:AST = new AST(instrucciones);
+        //instrucciones.forEach((element:Instruccion) => {
+        //    element.ejecutar(entornoGlobal,ast);
+        //});
+    }
+    
+    hola() {
+        console.log("hola mundo");
+    }
 }
 
-ejecutarCodigo(`
+/*ejecutarCodigo(`
 <?xml version="1.0" encoding="UTF-8"?>
 <note>
   <to>Tove</to>
@@ -56,4 +62,4 @@ ejecutarCodigo(`
     </book>
 </bookstore>
 </note>
-`);
+`);*/
