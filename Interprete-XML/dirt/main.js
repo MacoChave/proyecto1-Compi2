@@ -1,52 +1,47 @@
-import { AST } from "./AST/AST";
-import { Entorno } from "./AST/Entorno";
-import { Instruccion } from "./Interfaces/Instruccion";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Main = void 0;
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
-
-export class Main {
-
-    ejecutarCodigo(entrada: any) {
+class Main {
+    ejecutarCodigo(entrada) {
         console.log('ejecutando parse ...');
         const objetos = xmlAsc.parse(entrada);
         console.log(objetos);
     }
-
-    readFile(e: any) {
+    readFile(e) {
         console.log('read file ...');
         var file = e.target.files[0];
         if (!file)
             return;
-        const reader: FileReader = new FileReader();
-        reader.onload = (e: any) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
             let target = e.target;
             if (target !== undefined && target !== null) {
-                console.log('load text ...')
+                console.log('load text ...');
                 var contents = target.result;
                 var element = document.getElementById('codeBlock');
                 if (element !== undefined && element !== null) {
                     element.textContent = contents;
-                } else {
-                    console.log('Error set content')
                 }
-            } else {
-                console.log('Error read file')
+                else {
+                    console.log('Error set content');
+                }
+            }
+            else {
+                console.log('Error read file');
             }
         };
         reader.readAsText(file);
     }
-
     prueba() {
         console.log("hola mundo");
     }
-
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
             console.log("inputFile activo");
         }
-
         let analizeXmlAsc = document.getElementById('analizeXmlAsc');
         if (analizeXmlAsc !== undefined && analizeXmlAsc !== null) {
             console.log("btn xmlAsc activo");
@@ -57,16 +52,17 @@ export class Main {
                 this.ejecutarCodigo(content);
             });
         }
-
         let clean = document.getElementById('clean');
-        if(clean !== undefined && clean !== null){
+        if (clean !== undefined && clean !== null) {
             console.log("btn clean activo");
             clean.addEventListener('click', () => {
                 let codeBlock = document.getElementById('codeBlock');
-                if(codeBlock !== undefined && codeBlock !== null){
+                if (codeBlock !== undefined && codeBlock !== null) {
                     codeBlock.textContent = '';
-                };
+                }
+                ;
             });
         }
     }
 }
+exports.Main = Main;

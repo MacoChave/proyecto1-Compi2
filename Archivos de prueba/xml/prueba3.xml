@@ -1,0 +1,11 @@
+<root atributo="< hola que 
+sdfs ksd fjas ksfkjskd fskfjd 
+    skjfksajdf 
+    está pasando">
+    <message>salary &lt; 1000</message>
+    <message>salary &lt; &gt; &amp; 1000</message>
+    <message>salary &apos; 1000</message>
+    <message>salary &quot; 1000</message>
+    <message>salary "hola mundo que es lo que hacen" 1000</message>
+    <message>salary "hola mundo 1000</message>
+</root>

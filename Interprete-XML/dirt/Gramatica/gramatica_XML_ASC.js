@@ -71,13 +71,13 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[2,12],$V2=[1,15],$V3=[9,12,13,15],$V4=[1,34],$V5=[1,35],$V6=[1,30],$V7=[1,27],$V8=[1,29],$V9=[1,31],$Va=[1,28],$Vb=[1,32],$Vc=[1,33],$Vd=[8,9,10,12,13,15,19,22,23,24],$Ve=[5,8];
+var gramatica_XML_ASC = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[2,12],$V2=[1,15],$V3=[9,12,13,15],$V4=[1,36],$V5=[1,37],$V6=[1,32],$V7=[1,29],$V8=[1,31],$V9=[1,33],$Va=[1,28],$Vb=[1,30],$Vc=[1,34],$Vd=[1,35],$Ve=[1,38],$Vf=[1,39],$Vg=[8,9,10,12,13,15,19,20,26,27,28,29,30],$Vh=[5,8],$Vi=[1,52];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"HEAD":6,"OBJETO":7,"lt":8,"qst":9,"xml":10,"LATRIBUTOS":11,"gt":12,"identifier":13,"OBJETOS":14,"div":15,"LISTA_ID_OBJETO":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"StringLiteral":20,"VALUE":21,"contentH":22,"double":23,"integer":24,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"lt",9:"qst",10:"xml",12:"gt",13:"identifier",15:"div",19:"asig",20:"StringLiteral",22:"contentH",23:"double",24:"integer"},
-productions_: [0,[3,2],[4,2],[4,1],[6,6],[7,9],[7,8],[7,9],[7,5],[14,2],[14,1],[11,1],[11,0],[17,2],[17,1],[18,3],[16,2],[16,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1]],
+symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"HEAD":6,"OBJETO":7,"lt":8,"qst":9,"xml":10,"LATRIBUTOS":11,"gt":12,"identifier":13,"OBJETOS":14,"div":15,"CONTENIDO_OBJ":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"qmrk":20,"CONTENIDO_ATRB":21,"VALUES_CONT_OBJ":22,"VALUE":23,"LISTA_CONT_ATRB":24,"VALUES_CONT_ATRB":25,"contentH":26,"double":27,"integer":28,"minus":29,"Escape":30,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"lt",9:"qst",10:"xml",12:"gt",13:"identifier",15:"div",19:"asig",20:"qmrk",26:"contentH",27:"double",28:"integer",29:"minus",30:"Escape"},
+productions_: [0,[3,2],[4,2],[4,1],[6,6],[7,9],[7,8],[7,9],[7,5],[14,2],[14,1],[11,1],[11,0],[17,2],[17,1],[18,5],[16,2],[16,1],[22,1],[22,1],[21,1],[21,0],[24,2],[24,1],[25,1],[25,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -93,19 +93,19 @@ case 3: case 10: case 14:
  this.$ = [$$[$0]]; 
 break;
 case 4:
- this.$ = new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2],[]); 
+ this.$ = new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2],[],Etiqueta.HEADER); 
 break;
 case 5:
- this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+ this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],Etiqueta.DOBLE); 
 break;
 case 6:
- this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5],[]); 
+ this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5],[],Etiqueta.DOBLE); 
 break;
 case 7:
- this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[]); 
+ this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],Etiqueta.DOBLE); 
 break;
 case 8:
- this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[]); 
+ this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],Etiqueta.UNICA); 
 break;
 case 9: case 13:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
@@ -117,9 +117,9 @@ case 12:
  this.$ = []; 
 break;
 case 15:
- this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+ this.$ = new Atributo($$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column); 
 break;
-case 16:
+case 16: case 22:
 
                                                                                         if(_$[$0-1].last_line == _$[$0].first_line){ 
                                                                                             if(_$[$0-1].last_column < _$[$0].first_column ){
@@ -134,15 +134,21 @@ case 16:
                                                                                         }
                                                                                         $$[$0-1] = $$[$0-1] + $$[$0];
                                                                                         this.$ = $$[$0-1];
-                                                                                
+                                                                               
 break;
-case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26:
+case 17: case 18: case 19: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36:
  this.$ = $$[$0] 
+break;
+case 20:
+this.$ = $$[$0]
+break;
+case 21:
+this.$ = ''
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:[1,8]},{5:[2,3]},{9:[1,9],13:$V0},{1:[2,1]},{5:[2,2]},{13:$V0},{10:[1,11]},o([12,15],$V1,{11:12,17:13,18:14,13:$V2}),{9:$V1,11:16,13:$V2,17:13,18:14},{12:[1,17],15:[1,18]},o([9,12,15],[2,11],{18:19,13:$V2}),o($V3,[2,14]),{19:[1,20]},{9:[1,21]},{7:25,8:[1,23],9:$V4,10:$V5,12:$V6,13:$V7,14:22,15:$V8,16:24,19:$V9,21:26,22:$Va,23:$Vb,24:$Vc},{12:[1,36]},o($V3,[2,13]),{20:[1,37]},{12:[1,38]},{7:40,8:[1,39]},{13:$V0,15:[1,41]},{8:[1,42],9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:43,22:$Va,23:$Vb,24:$Vc},{8:[2,10]},o($Vd,[2,17]),o($Vd,[2,18]),o($Vd,[2,19]),o($Vd,[2,20]),o($Vd,[2,21]),o($Vd,[2,22]),o($Vd,[2,23]),o($Vd,[2,24]),o($Vd,[2,25]),o($Vd,[2,26]),o($Ve,[2,8]),o($V3,[2,15]),{8:[2,4]},{13:$V0,15:[1,44]},{8:[2,9]},{13:[1,45]},{15:[1,46]},o($Vd,[2,16]),{13:[1,47]},{12:[1,48]},{13:[1,49]},{12:[1,50]},o($Ve,[2,6]),{12:[1,51]},o($Ve,[2,5]),o($Ve,[2,7])],
-defaultActions: {4:[2,3],6:[2,1],7:[2,2],25:[2,10],38:[2,4],40:[2,9]},
+table: [{3:1,4:2,6:3,7:4,8:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:[1,8]},{5:[2,3]},{9:[1,9],13:$V0},{1:[2,1]},{5:[2,2]},{13:$V0},{10:[1,11]},o([12,15],$V1,{11:12,17:13,18:14,13:$V2}),{9:$V1,11:16,13:$V2,17:13,18:14},{12:[1,17],15:[1,18]},o([9,12,15],[2,11],{18:19,13:$V2}),o($V3,[2,14]),{19:[1,20]},{9:[1,21]},{7:25,8:[1,23],9:$V4,10:$V5,12:$V6,13:$V7,14:22,15:$V8,16:24,19:$V9,20:$Va,22:26,23:27,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{12:[1,40]},o($V3,[2,13]),{20:[1,41]},{12:[1,42]},{7:44,8:[1,43]},{13:$V0,15:[1,45]},{8:[1,46],9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:$Va,22:47,23:27,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{8:[2,10]},o($Vg,[2,17]),o($Vg,[2,18]),o($Vg,[2,19]),o($Vg,[2,26]),o($Vg,[2,27]),o($Vg,[2,28]),o($Vg,[2,29]),o($Vg,[2,30]),o($Vg,[2,31]),o($Vg,[2,32]),o($Vg,[2,33]),o($Vg,[2,34]),o($Vg,[2,35]),o($Vg,[2,36]),o($Vh,[2,8]),{8:$Vi,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:[2,21],21:48,23:51,24:49,25:50,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{8:[2,4]},{13:$V0,15:[1,53]},{8:[2,9]},{13:[1,54]},{15:[1,55]},o($Vg,[2,16]),{20:[1,56]},{8:$Vi,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:[2,20],23:51,25:57,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},o($Vg,[2,23]),o($Vg,[2,24]),o($Vg,[2,25]),{13:[1,58]},{12:[1,59]},{13:[1,60]},o($V3,[2,15]),o($Vg,[2,22]),{12:[1,61]},o($Vh,[2,6]),{12:[1,62]},o($Vh,[2,5]),o($Vh,[2,7])],
+defaultActions: {4:[2,3],6:[2,1],7:[2,2],25:[2,10],42:[2,4],44:[2,9]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -293,7 +299,7 @@ parse: function parse(input) {
     const {Print} = require("../Instrucciones/Primitivas/Print");
     const {Primitivo} = require("../Expresiones/Primitivo");
     const {Operacion, Operador} = require("../Expresiones/Operacion");
-    const {Objeto} = require("../Expresiones/Objeto");
+    const {Objeto, Etiqueta} = require("../Expresiones/Objeto");
     const {Atributo} = require("../Expresiones/Atributo");
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -641,28 +647,32 @@ case 7:return 19;
 break;
 case 8:return 9;
 break;
-case 9:return 10;
+case 9:return 29;
 break;
-case 10:return 22;
+case 10:return 10;
 break;
-case 11:return 13;
+case 11:return 20;
 break;
-case 12:return 23;
+case 12:return 26;
 break;
-case 13:return 24;
+case 13:return 13;
 break;
-case 14:return 20;
+case 14:return 27;
 break;
-case 15:
+case 15:return 28;
+break;
+case 16:return 30;
+break;
+case 17:
                                         console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                                     
 break;
-case 16:return 5
+case 18:return 5;
 break;
 }
 },
-rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:[^a-zA-Z_0-9ñÑ\-<\/>=\"?]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ\-]*)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:.)/i,/^(?:$)/i],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true},"Etiqueta":{"rules":[],"inclusive":false},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true}}
+rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:-)/i,/^(?:xml\b)/i,/^(?:")/i,/^(?:[^a-zA-Z_0-9ñÑ\-</>=\"?]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ\-]*)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:(\\([\'\"\\bfnrtv])))/i,/^(?:.)/i,/^(?:$)/i],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true},"Etiqueta":{"rules":[],"inclusive":false},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true}}
 });
 return lexer;
 })();
@@ -676,9 +686,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramatica;
-exports.Parser = gramatica.Parser;
-exports.parse = function () { return gramatica.parse.apply(gramatica, arguments); };
+exports.parser = gramatica_XML_ASC;
+exports.Parser = gramatica_XML_ASC.Parser;
+exports.parse = function () { return gramatica_XML_ASC.parse.apply(gramatica_XML_ASC, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
