@@ -4,7 +4,7 @@ exports.Atributo = void 0;
 class Atributo {
     constructor(id, valor, linea, columna) {
         this.identificador = id;
-        this.valor = valor.split('"').join('');
+        this.valor = valor;
         this.linea = linea;
         this.columna = columna;
     }

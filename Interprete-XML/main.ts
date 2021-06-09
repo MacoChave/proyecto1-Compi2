@@ -2,16 +2,18 @@ import { AST } from "./AST/AST";
 import { Entorno } from "./AST/Entorno";
 import { Instruccion } from "./Interfaces/Instruccion";
 
-const xmlAsc = require('./Gramatica/gramatica');
+const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 
 export class Main {
 
     ejecutarCodigo(entrada: any) {
+        console.log('ejecutando parse ...');
         const objetos = xmlAsc.parse(entrada);
         console.log(objetos);
     }
 
     readFile(e: any) {
+        console.log('read file ...');
         var file = e.target.files[0];
         if (!file)
             return;
@@ -19,11 +21,16 @@ export class Main {
         reader.onload = (e: any) => {
             let target = e.target;
             if (target !== undefined && target !== null) {
+                console.log('load text ...')
                 var contents = target.result;
                 var element = document.getElementById('codeBlock');
                 if (element !== undefined && element !== null) {
                     element.textContent = contents;
+                } else {
+                    console.log('Error set content')
                 }
+            } else {
+                console.log('Error read file')
             }
         };
         reader.readAsText(file);
@@ -45,10 +52,20 @@ export class Main {
             console.log("btn xmlAsc activo");
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
-                console.log('hola');
                 let codeBlock = document.getElementById('codeBlock');
-                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
+                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.textContent : '';
                 this.ejecutarCodigo(content);
+            });
+        }
+
+        let clean = document.getElementById('clean');
+        if(clean !== undefined && clean !== null){
+            console.log("btn clean activo");
+            clean.addEventListener('click', () => {
+                let codeBlock = document.getElementById('codeBlock');
+                if(codeBlock !== undefined && codeBlock !== null){
+                    codeBlock.textContent = '';
+                };
             });
         }
     }
