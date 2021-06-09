@@ -24,6 +24,7 @@ BSL                                                     "\\".
 ">"                                                     return 'gt';
 "="                                                     return 'asig';
 "?"                                                     return 'qst';
+"-"                                                     return 'minus';
 "xml"                                                   return 'xml';
 
 /* Number literals */
@@ -124,4 +125,5 @@ VALUE:
     | integer                                                                   { $$ = $1 }
     | qst                                                                       { $$ = $1 }
     | xml                                                                       { $$ = $1 }
+    | minus                                                                     { $$ = $1 }
 ;

@@ -1,22 +1,18 @@
-import { AST } from "./AST/AST";
-import { Entorno } from "./AST/Entorno";
-import { Instruccion } from "./Interfaces/Instruccion";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Main = void 0;
 const xmlAsc = require('./Gramatica/gramatica');
-
-export class Main {
-
-    ejecutarCodigo(entrada: any) {
+class Main {
+    ejecutarCodigo(entrada) {
         const objetos = xmlAsc.parse(entrada);
         console.log(objetos);
     }
-
-    readFile(e: any) {
+    readFile(e) {
         var file = e.target.files[0];
         if (!file)
             return;
-        const reader: FileReader = new FileReader();
-        reader.onload = (e: any) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
             let target = e.target;
             if (target !== undefined && target !== null) {
                 var contents = target.result;
@@ -28,18 +24,15 @@ export class Main {
         };
         reader.readAsText(file);
     }
-
     prueba() {
         console.log("hola mundo");
     }
-
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
             console.log("inputFile activo");
         }
-
         let analizeXmlAsc = document.getElementById('analizeXmlAsc');
         if (analizeXmlAsc !== undefined && analizeXmlAsc !== null) {
             console.log("btn xmlAsc activo");
@@ -53,3 +46,4 @@ export class Main {
         }
     }
 }
+exports.Main = Main;
