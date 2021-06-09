@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "gramatica": "jison ./Gramatica/gramatica.jison"
+    "gramatica": "jison ./Gramatica/gramatica_XML_ASC.jison"
   },
   "author": "Haroldo Pablo Arias Molina",
   "license": "ISC",

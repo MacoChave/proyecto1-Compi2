@@ -59,107 +59,82 @@ BSL                                                     "\\".
 
 
 /* Definición de la gramática */
-START : RAIZ EOF                                                               { $$ = $1; return $$; }
+START : RAIZ EOF                                                            
 ;
 
 RAIZ:
-    HEAD OBJETO                                                                { $$ = [$1,$2]; }
-    | OBJETO                                                                   { $$ = [$1]; }
+    HEAD OBJETO                                                                
+    | OBJETO                                                                   
 ;
 
 HEAD:
-    lt qst xml LATRIBUTOS qst gt                                               { $$ = new Objeto($3,'',@1.first_line, @1.first_column,$4,[]); }
+    lt qst xml LATRIBUTOS qst gt                                           
 ;
 
-OBJETO:
-      lt identifier LATRIBUTOS gt OBJETOS           lt div identifier gt       { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
-    | lt identifier LATRIBUTOS gt                   lt div identifier gt       { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }
-    | lt identifier LATRIBUTOS gt LISTA_ID_OBJETO   lt div identifier gt       { $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[]); }
-    | lt identifier LATRIBUTOS div gt                                          { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }
+OBJETO: INICIO FIN
 ;
 
+INICIO: '<' identifier LATRIBUTOS
+;
+
+
+FIN: '>' CONTENT '<' '\' identifier '>'
+    | '\' '>' 
+;
+
+
+CONTENT : OBJETOS
+        | LISTA_ID_OBJETO
+;
 
 
 
 OBJETOS:
-      OBJETO OBJETOSP                                                          { $2.push($1); $$ = $2; } 
-;
-
-OBJETOSP: OBJETO OBJETOSP                                                      { $2.push($1); $$ = $2;}
-    |                                                                          { $$ = []; }
+      OBJETO OBJETOS
+      |                                                       
 ;
 
 
-LATRIBUTOS: ATRIBUTOS                                                          { $$ = $1; }
-    |                                                                          { $$ = []; }
+
+LATRIBUTOS: ATRIBUTOS                                                         
+    |                                                                         
 ;
 
 ATRIBUTOS:
-    ATRIBUTO ATRIBUTOSP                                                        { $2.push($1); $$ = $2;}
+    ATRIBUTO ATRIBUTOSP                                                       
     
 ;
 ATRIBUTOSP: 
-    ATRIBUTO ATRIBUTOSP                                                       { $2.push($1); $$ = $2; }
-    |                                                                         { $$ = []; }
+    ATRIBUTO ATRIBUTOSP                                                       
+    |                                                                        
 ;
-
-
 
 
 
 ATRIBUTO: 
-    identifier asig StringLiteral                                              { $$ = new Atributo($1, $3, @1.first_line, @1.first_column); }
+    identifier asig StringLiteral                                              
 ;
 
 
 
 
-LISTA_ID_OBJETO:  VALUE  LISTA_ID_OBJETOP                                         {
-                                                                                        if(@1.last_line == @2.first_line){ 
-                                                                                            if(@1.last_column < @2.first_column ){
-                                                                                                for(let i = 0, size = @2.first_column - @1.last_column; i < size; i++ ){
-                                                                                                    $2 = $2 + ' ';
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            for(let i = 0, size = @2.first_line - @1.last_line; i < size; i++ ){
-                                                                                                $2 = $2 + '\n';
-                                                                                            }
-                                                                                        }
-                                                                                        $2 = $2 + $1;
-                                                                                        $$ = $2;
-                                                                                }
+LISTA_ID_OBJETO:  VALUE  LISTA_ID_OBJETOP                                         
 ;
 
-LISTA_ID_OBJETOP: VALUE LISTA_ID_OBJETOP {
-                                                                                        if(@1.last_line == @2.first_line){ 
-                                                                                            if(@1.last_column < @2.first_column ){
-                                                                                                for(let i = 0, size = @2.first_column - @1.last_column; i < size; i++ ){
-                                                                                                    $2 = $2 + ' ';
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            for(let i = 0, size = @2.first_line - @1.last_line; i < size; i++ ){
-                                                                                                $2 = $2 + '\n';
-                                                                                            }
-                                                                                        }
-                                                                                        $2 = $2 + $1;
-                                                                                        $$ = $2;
-                                                                                }
-
-|                                                                                  { $$ = []; }
+LISTA_ID_OBJETOP: VALUE LISTA_ID_OBJETOP 
+|                                                                               
 ;                                                                            
 
 
 
 VALUE:
-    identifier                                                                  { $$ = $1 }
-    | contentH                                                                  { $$ = $1 }
-    | div                                                                       { $$ = $1 }
-    | gt                                                                        { $$ = $1 }
-    | asig                                                                      { $$ = $1 }
-    | double                                                                    { $$ = $1 }
-    | integer                                                                   { $$ = $1 }
-    | qst                                                                       { $$ = $1 }
-    | xml                                                                       { $$ = $1 }
+    identifier                                                                
+    | contentH                                                          
+    | div                                                               
+    | gt                                                                     
+    | asig                                                     
+    | double                                                           
+    | integer                                                 
+    | qst                                                                 
+    | xml                                                                       
 ;
