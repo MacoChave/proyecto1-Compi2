@@ -16,6 +16,15 @@ class Objeto {
         this.listaAtributos = listaAtributos;
         this.listaObjetos = listaO;
         this.etiqueta = etiqueta;
+        this.textWithoutSpecial = this.setCaracteresEspeciales(texto);
+    }
+    setCaracteresEspeciales(valor) {
+        let value = valor.split("&lt;").join("<");
+        value = value.split("&gt;").join(">");
+        value = value.split("&amp;").join("&");
+        value = value.split("&apos;").join("'");
+        value = value.split("&quot;").join('"');
+        return value;
     }
 }
 exports.Objeto = Objeto;

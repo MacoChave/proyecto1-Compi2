@@ -72,19 +72,27 @@
   }
 */
 var gramatica_XML_ASC = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[2,12],$V2=[1,15],$V3=[9,12,13,15],$V4=[1,36],$V5=[1,37],$V6=[1,32],$V7=[1,29],$V8=[1,31],$V9=[1,33],$Va=[1,28],$Vb=[1,30],$Vc=[1,34],$Vd=[1,35],$Ve=[1,38],$Vf=[1,39],$Vg=[8,9,10,12,13,15,19,20,26,27,28,29,30],$Vh=[5,8],$Vi=[1,52];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[2,12],$V2=[1,15],$V3=[9,12,13,15],$V4=[1,37],$V5=[1,38],$V6=[1,33],$V7=[1,30],$V8=[1,32],$V9=[1,34],$Va=[1,28],$Vb=[1,29],$Vc=[1,31],$Vd=[1,35],$Ve=[1,36],$Vf=[1,39],$Vg=[1,40],$Vh=[8,9,10,12,13,15,19,21,23,31,32,33,34,35],$Vi=[5,8],$Vj=[1,55],$Vk=[1,56],$Vl=[1,61],$Vm=[1,62];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"HEAD":6,"OBJETO":7,"lt":8,"qst":9,"xml":10,"LATRIBUTOS":11,"gt":12,"identifier":13,"OBJETOS":14,"div":15,"CONTENIDO_OBJ":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"qmrk":20,"CONTENIDO_ATRB":21,"VALUES_CONT_OBJ":22,"VALUE":23,"LISTA_CONT_ATRB":24,"VALUES_CONT_ATRB":25,"contentH":26,"double":27,"integer":28,"minus":29,"Escape":30,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"lt",9:"qst",10:"xml",12:"gt",13:"identifier",15:"div",19:"asig",20:"qmrk",26:"contentH",27:"double",28:"integer",29:"minus",30:"Escape"},
-productions_: [0,[3,2],[4,2],[4,1],[6,6],[7,9],[7,8],[7,9],[7,5],[14,2],[14,1],[11,1],[11,0],[17,2],[17,1],[18,5],[16,2],[16,1],[22,1],[22,1],[21,1],[21,0],[24,2],[24,1],[25,1],[25,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1]],
+symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"HEAD":6,"OBJETO":7,"lt":8,"qst":9,"xml":10,"LATRIBUTOS":11,"gt":12,"identifier":13,"OBJETOS":14,"div":15,"CONTENIDO_OBJ":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"FIN_ATRIBUTO":20,"qmrk":21,"CONTENIDO_ATRB":22,"apost":23,"CONTENIDO_ATRB_SMPL":24,"VALUES_CONT_OBJ":25,"VALUE":26,"LISTA_CONT_ATRB":27,"VALUES_CONT_ATRB":28,"LISTA_CONT_ATRB_SMPL":29,"VALUES_CONT_ATRB_SMPL":30,"contentH":31,"double":32,"integer":33,"minus":34,"Escape":35,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"lt",9:"qst",10:"xml",12:"gt",13:"identifier",15:"div",19:"asig",21:"qmrk",23:"apost",31:"contentH",32:"double",33:"integer",34:"minus",35:"Escape"},
+productions_: [0,[3,2],[4,2],[4,1],[6,6],[7,9],[7,8],[7,9],[7,5],[14,2],[14,1],[11,1],[11,0],[17,2],[17,1],[18,3],[20,3],[20,3],[16,2],[16,1],[25,1],[25,1],[25,1],[22,1],[22,0],[27,2],[27,1],[28,1],[28,1],[28,1],[24,1],[24,0],[29,2],[29,1],[30,1],[30,1],[30,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = $$[$0-1]; return this.$; 
+ 
+                                                                                    this.$ = { objeto: $$[$0-1],
+                                                                                        erroresSemanticos: erroresSemanticos,
+                                                                                        erroresLexicos: erroresLexicos
+                                                                                        };
+                                                                                    erroresLexicos = [];
+                                                                                    erroresSemanticos = [];
+                                                                                    return this.$;
+                                                                               
 break;
 case 2:
  this.$ = [$$[$0-1],$$[$0]]; 
@@ -96,13 +104,28 @@ case 4:
  this.$ = new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2],[],Etiqueta.HEADER); 
 break;
 case 5:
- this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],Etiqueta.DOBLE); 
+
+                                                                                    this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],Etiqueta.DOBLE);
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                               
 break;
 case 6:
- this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5],[],Etiqueta.DOBLE); 
+ 
+                                                                                    this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5],[],Etiqueta.DOBLE);
+                                                                                    if($$[$0-6] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                               
 break;
 case 7:
- this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],Etiqueta.DOBLE); 
+ 
+                                                                                    this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],Etiqueta.DOBLE); 
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                               
 break;
 case 8:
  this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],Etiqueta.UNICA); 
@@ -117,9 +140,15 @@ case 12:
  this.$ = []; 
 break;
 case 15:
- this.$ = new Atributo($$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column); 
+ this.$ = new Atributo($$[$0-2], $$[$0].valor, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0].comilla); 
 break;
-case 16: case 22:
+case 16:
+ this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE); 
+break;
+case 17:
+ this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.SIMPLE); 
+break;
+case 18: case 25: case 32:
 
                                                                                         if(_$[$0-1].last_line == _$[$0].first_line){ 
                                                                                             if(_$[$0-1].last_column < _$[$0].first_column ){
@@ -136,19 +165,19 @@ case 16: case 22:
                                                                                         this.$ = $$[$0-1];
                                                                                
 break;
-case 17: case 18: case 19: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36:
+case 19: case 20: case 21: case 22: case 26: case 27: case 28: case 29: case 33: case 34: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47:
  this.$ = $$[$0] 
 break;
-case 20:
+case 23: case 30:
 this.$ = $$[$0]
 break;
-case 21:
+case 24: case 31:
 this.$ = ''
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:[1,8]},{5:[2,3]},{9:[1,9],13:$V0},{1:[2,1]},{5:[2,2]},{13:$V0},{10:[1,11]},o([12,15],$V1,{11:12,17:13,18:14,13:$V2}),{9:$V1,11:16,13:$V2,17:13,18:14},{12:[1,17],15:[1,18]},o([9,12,15],[2,11],{18:19,13:$V2}),o($V3,[2,14]),{19:[1,20]},{9:[1,21]},{7:25,8:[1,23],9:$V4,10:$V5,12:$V6,13:$V7,14:22,15:$V8,16:24,19:$V9,20:$Va,22:26,23:27,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{12:[1,40]},o($V3,[2,13]),{20:[1,41]},{12:[1,42]},{7:44,8:[1,43]},{13:$V0,15:[1,45]},{8:[1,46],9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:$Va,22:47,23:27,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{8:[2,10]},o($Vg,[2,17]),o($Vg,[2,18]),o($Vg,[2,19]),o($Vg,[2,26]),o($Vg,[2,27]),o($Vg,[2,28]),o($Vg,[2,29]),o($Vg,[2,30]),o($Vg,[2,31]),o($Vg,[2,32]),o($Vg,[2,33]),o($Vg,[2,34]),o($Vg,[2,35]),o($Vg,[2,36]),o($Vh,[2,8]),{8:$Vi,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:[2,21],21:48,23:51,24:49,25:50,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},{8:[2,4]},{13:$V0,15:[1,53]},{8:[2,9]},{13:[1,54]},{15:[1,55]},o($Vg,[2,16]),{20:[1,56]},{8:$Vi,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,20:[2,20],23:51,25:57,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf},o($Vg,[2,23]),o($Vg,[2,24]),o($Vg,[2,25]),{13:[1,58]},{12:[1,59]},{13:[1,60]},o($V3,[2,15]),o($Vg,[2,22]),{12:[1,61]},o($Vh,[2,6]),{12:[1,62]},o($Vh,[2,5]),o($Vh,[2,7])],
-defaultActions: {4:[2,3],6:[2,1],7:[2,2],25:[2,10],42:[2,4],44:[2,9]},
+table: [{3:1,4:2,6:3,7:4,8:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:[1,8]},{5:[2,3]},{9:[1,9],13:$V0},{1:[2,1]},{5:[2,2]},{13:$V0},{10:[1,11]},o([12,15],$V1,{11:12,17:13,18:14,13:$V2}),{9:$V1,11:16,13:$V2,17:13,18:14},{12:[1,17],15:[1,18]},o([9,12,15],[2,11],{18:19,13:$V2}),o($V3,[2,14]),{19:[1,20]},{9:[1,21]},{7:25,8:[1,23],9:$V4,10:$V5,12:$V6,13:$V7,14:22,15:$V8,16:24,19:$V9,21:$Va,23:$Vb,25:26,26:27,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{12:[1,41]},o($V3,[2,13]),{20:42,21:[1,43],23:[1,44]},{12:[1,45]},{7:47,8:[1,46]},{13:$V0,15:[1,48]},{8:[1,49],9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Va,23:$Vb,25:50,26:27,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:[2,10]},o($Vh,[2,19]),o($Vh,[2,20]),o($Vh,[2,21]),o($Vh,[2,22]),o($Vh,[2,37]),o($Vh,[2,38]),o($Vh,[2,39]),o($Vh,[2,40]),o($Vh,[2,41]),o($Vh,[2,42]),o($Vh,[2,43]),o($Vh,[2,44]),o($Vh,[2,45]),o($Vh,[2,46]),o($Vh,[2,47]),o($Vi,[2,8]),o($V3,[2,15]),{8:$Vj,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:[2,24],22:51,23:$Vk,26:54,27:52,28:53,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:$Vl,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Vm,23:[2,31],24:57,26:60,29:58,30:59,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:[2,4]},{13:$V0,15:[1,63]},{8:[2,9]},{13:[1,64]},{15:[1,65]},o($Vh,[2,18]),{21:[1,66]},{8:$Vj,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:[2,23],23:$Vk,26:54,28:67,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},o($Vh,[2,26]),o($Vh,[2,27]),o($Vh,[2,28]),o($Vh,[2,29]),{23:[1,68]},{8:$Vl,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Vm,23:[2,30],26:60,30:69,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},o($Vh,[2,33]),o($Vh,[2,34]),o($Vh,[2,35]),o($Vh,[2,36]),{13:[1,70]},{12:[1,71]},{13:[1,72]},o($V3,[2,16]),o($Vh,[2,25]),o($V3,[2,17]),o($Vh,[2,32]),{12:[1,73]},o($Vi,[2,6]),{12:[1,74]},o($Vi,[2,5]),o($Vi,[2,7])],
+defaultActions: {4:[2,3],6:[2,1],7:[2,2],25:[2,10],45:[2,4],47:[2,9]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -296,11 +325,12 @@ parse: function parse(input) {
     return true;
 }};
 
-    const {Print} = require("../Instrucciones/Primitivas/Print");
-    const {Primitivo} = require("../Expresiones/Primitivo");
-    const {Operacion, Operador} = require("../Expresiones/Operacion");
+    const {Error} = require("../Errores/Error");
     const {Objeto, Etiqueta} = require("../Expresiones/Objeto");
-    const {Atributo} = require("../Expresiones/Atributo");
+    const {Atributo, Comilla} = require("../Expresiones/Atributo");
+
+    var erroresSemanticos = [];
+    var erroresLexicos = [];
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -647,32 +677,35 @@ case 7:return 19;
 break;
 case 8:return 9;
 break;
-case 9:return 29;
+case 9:return 34;
 break;
 case 10:return 10;
 break;
-case 11:return 20;
+case 11:return 21;
 break;
-case 12:return 26;
+case 12:return 23;
 break;
-case 13:return 13;
+case 13:return 31;
 break;
-case 14:return 27;
+case 14:return 13;
 break;
-case 15:return 28;
+case 15:return 32;
 break;
-case 16:return 30;
+case 16:return 33;
 break;
-case 17:
-                                        console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+case 17:return 35;
+break;
+case 18:
+                                        erroresLexicos.push(new Error('Error Lexico en linea ' + yy_.yylloc.first_line + ' y columna: ' + yy_.yylloc.first_column + ': ' + yy_.yytext));
+                                        //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                                     
 break;
-case 18:return 5;
+case 19:return 5;
 break;
 }
 },
-rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:-)/i,/^(?:xml\b)/i,/^(?:")/i,/^(?:[^a-zA-Z_0-9ñÑ\-</>=\"?]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ\-]*)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:(\\([\'\"\\bfnrtv])))/i,/^(?:.)/i,/^(?:$)/i],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true},"Etiqueta":{"rules":[],"inclusive":false},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true}}
+rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:-)/i,/^(?:xml\b)/i,/^(?:")/i,/^(?:')/i,/^(?:[^a-zA-Z_0-9ñÑ\-</>=\"?']+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ\-]*)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:(\\([\'\"\\bfnrtv])))/i,/^(?:.)/i,/^(?:$)/i],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true},"Etiqueta":{"rules":[],"inclusive":false},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true}}
 });
 return lexer;
 })();

@@ -53,18 +53,18 @@ export class Main {
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
-                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.textContent : '';
+                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
                 this.ejecutarCodigo(content);
             });
         }
 
         let clean = document.getElementById('clean');
-        if(clean !== undefined && clean !== null){
+        if (clean !== undefined && clean !== null) {
             console.log("btn clean activo");
             clean.addEventListener('click', () => {
                 let codeBlock = document.getElementById('codeBlock');
-                if(codeBlock !== undefined && codeBlock !== null){
-                    codeBlock.textContent = '';
+                if (codeBlock !== undefined && codeBlock !== null) {
+                    codeBlock.value = '';
                 };
             });
         }
