@@ -48,7 +48,7 @@ class Main {
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
-                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.textContent : '';
+                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
                 this.ejecutarCodigo(content);
             });
         }
@@ -58,7 +58,7 @@ class Main {
             clean.addEventListener('click', () => {
                 let codeBlock = document.getElementById('codeBlock');
                 if (codeBlock !== undefined && codeBlock !== null) {
-                    codeBlock.textContent = '';
+                    codeBlock.value = '';
                 }
                 ;
             });
