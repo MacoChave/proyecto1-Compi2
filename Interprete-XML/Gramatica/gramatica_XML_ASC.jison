@@ -30,7 +30,7 @@ BSL                                                     "\\".
 
 /* Number literals */
 
-[^a-zA-Z_0-9ñÑ\-</>=\"?]+                               return 'contentH';
+[^a-zA-Z_0-9ñÑ\-</>=\"?~]+                               return 'contentH';
 [a-zA-Z_][a-zA-Z0-9_ñÑ\-]*                              return 'identifier';
 (([0-9]+"."[0-9]*)|("."[0-9]+))                         return 'double';
 [0-9]+                                                  return 'integer';
@@ -42,11 +42,12 @@ BSL                                                     "\\".
 {ampersand}                                             return 'ampersand';
 {apostrophe}                                            return 'apostrophe';
 {quotation_mark}                                        return 'quotationMark';*/
-
 //error lexico
-.                                   {
-                                        console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                                    }
+.   {
+        ArrayErrorLex.push('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+        console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+        console.log(ArrayErrorLex);
+    }
 
 <<EOF>>                                                 return 'EOF';
 
@@ -59,6 +60,8 @@ BSL                                                     "\\".
     const {Operacion, Operador} = require("../Expresiones/Operacion");
     const {Objeto, Etiqueta} = require("../Expresiones/Objeto");
     const {Atributo} = require("../Expresiones/Atributo");
+    var ArrayErrorLex = new Array();
+    global.myFunction = function() {return 25}
 %}
 
 // DEFINIMOS PRODUCCIÓN INICIAL

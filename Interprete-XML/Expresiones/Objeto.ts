@@ -15,7 +15,7 @@ export class Objeto{
     columna: number;
     etiqueta: Etiqueta;
 
-    constructor(id:string, texto:string, linea:number, columna:number, listaAtributos:Array<Atributo>, listaO:Array<Objeto>, etiqueta){
+    constructor(id:string, texto:string, linea:number, columna:number, listaAtributos:Array<Atributo>, listaO:Array<Objeto>, etiqueta:Etiqueta){
         this.identificador = id;
         this.texto = texto;
         this.linea = linea;
