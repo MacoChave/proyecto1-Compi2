@@ -100,6 +100,7 @@ MOD_EL :
 
 EL :
         id
+/*        | id PRE //CUANDO VIENE UN NODO CON [] PARA FILTRAR SU CONTENIDO*/
         | '*'
         | ATTR
         ;
@@ -113,6 +114,7 @@ ATTR_P :
         | '*'
         ;
 
+/* PRODUCCIÓN EN CONFLICTO :( */
 PRE :
         '[' E ']'
         |
