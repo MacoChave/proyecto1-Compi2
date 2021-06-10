@@ -2,10 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
+const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
-    ejecutarCodigo(entrada) {
-        console.log('ejecutando parse ...');
+    ejecutarCodigoXmlAsc(entrada) {
+        console.log('ejecutando xmlAsc ...');
         const objetos = xmlAsc.parse(entrada);
+        console.log(objetos);
+    }
+    ejecutarCodigoXpathAsc(entrada) {
+        console.log('ejecutando xpathAsc ...');
+        const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
     }
     readFile(e) {
@@ -49,7 +55,17 @@ class Main {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
                 let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
-                this.ejecutarCodigo(content);
+                this.ejecutarCodigoXmlAsc(content);
+            });
+        }
+        let analizeXPathAsc = document.getElementById('analizeXPathAsc');
+        if (analizeXPathAsc !== undefined && analizeXPathAsc !== null) {
+            console.log("btn xpathAsc activo");
+            analizeXPathAsc.addEventListener('click', () => {
+                // ANALIZAR XML
+                let input = document.getElementById('codeXPath');
+                let content = input !== undefined && input !== null ? input.value : '';
+                this.ejecutarCodigoXpathAsc(content);
             });
         }
         let clean = document.getElementById('clean');
