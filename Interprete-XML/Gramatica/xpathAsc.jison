@@ -17,6 +17,7 @@ stringliteral                       \"{stringdouble}*\"
 "attr"                                                  return 'resAttr'
 "node"                                                  return 'resNode'
 "text"                                                  return 'resText'
+"position"                                              return 'resPosition'
 "child"                                                 return 'resChild'
 "attribute"                                             return 'resAttribute'
 "descendant"                                            return 'resDescendant'
@@ -63,7 +64,11 @@ stringliteral                       \"{stringdouble}*\"
 
 //SECCION DE IMPORTS
 %{
+        const { Error } = require('../Errores/Error')
+        const { Element, Filter, Operation, TypeElement, TypeOperation } = require('../Instrucciones/Element/Element')
 
+        var erroresSemanticos = [];
+        var erroresLexicos = [];
 %}
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
@@ -80,69 +85,164 @@ stringliteral                       \"{stringdouble}*\"
 
 /* Definición de la gramática */
 START : 
-        PATHS EOF
+        PATHS EOF               {       
+                                    $$ =    { 
+                                                objeto: $1,
+                                                erroresSemanticos: erroresSemanticos,
+                                                erroresLexicos: erroresLexicos
+                                            };
+
+                                    erroresLexicos = [];
+                                    erroresSemanticos = [];
+
+                                    return $$; 
+                                }
         ;
 
 PATHS : 
-        PATHS '|' PATH
-        | PATH
+        PATHS '|' PATH          { $$ = $1.push($3) }
+        | PATH                  { $$ = [$1] }
         ;
 
 PATH : 
-        NODES
+        NODES                   { $$ = $1 }
         ;
 
 NODES :
-        NODES SLASH EL
-        | SLASH EL
+        NODES SLASH EL          { 
+                                    if ($2 == 2) {
+                                        $3.recursive = true
+                                    }
+                                    $1.push($3)
+                                    $$ = $1
+                                }
+        | SLASH EL              {
+                                    if ($1 == 2) {
+                                        $2.recursive = true
+                                        $2.fromRoot = true
+                                    }
+                                    else if ($1 == 1) {
+                                        $2.fromRoot = true
+                                    }
+                                    $$ = [$2]
+                                }
         ;
 
 SLASH:
-        div div
-        | div
-        |
+        div div                 { $$ = 2 }
+        | div                   { $$ = 1 }
+        |                       { $$ = 0 }
 ;
 
 EL :
-        id PRE
-        | '*'
-        | ATTR
+        id PRE                  { $$ = new Element($1, TypeElement.NODO, $2, @1.first_line, @1.first_column) }
+        | '*'                   { $$ = new Element('', TypeElement.ALL, $2, @1.first_line, @1.first_column) }
+        | ATTR                  { $$ = $1 }
         ;
 
 ATTR :
-        '@' ATTR_P
+        '@' ATTR_P              { $$ = $2 }
         ;
 
 ATTR_P :
-        id
-        | '*'
+        id                      { $$ = new Element($1, TypeElement.NODO, $2, @1.first_line, @1.first_column) }
+        | '*'                   { $$ = new Element($1, TypeElement.ALL, $2, @1.first_line, @1.first_column) }
         ;
 
 PRE :
-        '[' E ']'
-        |
+        '[' E ']'               { $$ = $2 }
+        |                       { $$ = [] }
         ;
 
-E :
-        E '+' E
-        | E '-' E
-        | E '*' E
-        | E 'div' E
-        | E '=' E
-        | E '!=' E
-        | E '<' E
-        | E '>' E
-        | E '<=' E
-        | E '>=' E
-        | E 'or' E
-        | E 'and' E
-        | E 'mod' E
-        | '(' E ')'
-        | double
-        | integer
-        | StringLiteral
-        | id
-        | last '(' ')'
-        | position '(' ')'
-        | ATTR
+E : // return new Operacion()
+        E '+' E                 { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.SUMA)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '-' E               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.RESTA)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '*' E               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MULTIPLICACION)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E 'div' E             { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.DIVISION)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '=' E               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.IGUAL)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '!=' E              { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.DIFERENTE)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '<' E               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MENOR)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '>' E               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MAYOR)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '<=' E              { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MENOR_IGUAL)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E '>=' E              { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MAYOR_IGUAL)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E 'or' E              { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.OR)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E 'and' E             { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.AND)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | E 'mod' E             { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.MOD)
+                                    op.saveBinaryOp($1, $3)
+                                    $$ = op
+                                }
+        | '(' E ')'             { $$ = $2 }
+        | double                { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.DOUBLE)
+                                    op.savePrimitiveOp($1)
+                                    $$ = op
+                                }
+        | integer               { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.INTEGER)
+                                    op.savePrimitiveOp($1)
+                                    $$ = op
+                                }
+        | StringLiteral         { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.STRING)
+                                    op.savePrimitiveOp($1)
+                                    $$ = op
+                                }
+        | id                    { 
+                                    var op = new Operation($1.first_line, @1.first_column, TypeOperation.ID)
+                                    op.savePrimitiveOp($1)
+                                    $$ = op
+                                }
+        | last '(' ')'          { $$ = new Operation('LAST'.first_line, @1.first_column, TypeOperation.LAST) }
+        | position '(' ')'      { $$ = new Operation('POSITION'.first_line, @1.first_column, TypeOperation.POSITION) }
+        | text '(' ')'          { $$ = new Operation('TEXT'.first_line, @1.first_column, TypeOperation.TEXT) }
+        | ATTR                  { $$ = new Operation($1.name, $1.linea, $1.columna, TypeOperation.ATRIBUTO) }
         ;

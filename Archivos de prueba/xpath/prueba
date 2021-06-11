@@ -6,7 +6,7 @@ bookstore/book
 /bookstore/book/title
 //book
 bookstore//book
-//@lang
+//@lang -> ENTRA POR ERROR A EL -> id PRE
 
 * Especificaciones de nodos
   
