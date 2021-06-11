@@ -2,10 +2,23 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
+const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
-    ejecutarCodigo(entrada) {
-        console.log('ejecutando parse ...');
+    constructor() {
+        this.lexicos = [];
+    }
+    ejecutarCodigoXmlAsc(entrada) {
+        console.log('ejecutando xmlAsc ...');
         const objetos = xmlAsc.parse(entrada);
+        console.log(objetos);
+        window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
+        //this.Errsemantico = objetos.erroresSemanticos;
+        //console.log(this.Errsemantico);
+        //console.log(objetos);
+    }
+    ejecutarCodigoXpathAsc(entrada) {
+        console.log('ejecutando xpathAsc ...');
+        const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
     }
     readFile(e) {
@@ -36,6 +49,22 @@ class Main {
     prueba() {
         console.log("hola mundo");
     }
+    getErroresLexicos() {
+        let lex = window.localStorage.getItem('lexicos');
+        if (lex) {
+            this.lexicos = JSON.parse(lex);
+            console.log(this.lexicos);
+            var tbodyRef = document.getElementById('keywords');
+            let i = 1;
+            this.lexicos.forEach((element) => {
+                let newRow = tbodyRef.insertRow();
+                let newCell = newRow.insertCell();
+                let newText2 = document.createTextNode(element.descripcion);
+                newCell.appendChild(newText2);
+            });
+        }
+        //setup our table array
+    }
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
@@ -49,7 +78,17 @@ class Main {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
                 let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
-                this.ejecutarCodigo(content);
+                this.ejecutarCodigoXmlAsc(content);
+            });
+        }
+        let analizeXPathAsc = document.getElementById('analizeXPathAsc');
+        if (analizeXPathAsc !== undefined && analizeXPathAsc !== null) {
+            console.log("btn xpathAsc activo");
+            analizeXPathAsc.addEventListener('click', () => {
+                // ANALIZAR XML
+                let input = document.getElementById('codeXPath');
+                let content = input !== undefined && input !== null ? input.value : '';
+                this.ejecutarCodigoXpathAsc(content);
             });
         }
         let clean = document.getElementById('clean');
@@ -61,6 +100,13 @@ class Main {
                     codeBlock.value = '';
                 }
                 ;
+            });
+        }
+        let tablaErrores = document.getElementById('tablaErrores');
+        if (tablaErrores !== undefined && tablaErrores !== null) {
+            console.log("btn Tabla Errores Activo");
+            tablaErrores.addEventListener('click', () => {
+                this.getErroresLexicos();
             });
         }
     }

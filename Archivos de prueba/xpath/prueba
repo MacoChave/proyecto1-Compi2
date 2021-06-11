@@ -1,0 +1,36 @@
+* Acceso a nodos
+
+bookstore
+/bookstore
+bookstore/book
+/bookstore/book/title
+//book
+bookstore//book
+//@lang
+
+* Especificaciones de nodos
+  
+/bookstore/book[1]
+/bookstore/book[1]/title
+/bookstore/book/price[text()]
+/bookstore/book[price>35]/price
+/bookstore/book[price>35]/title
+/bookstore/book[last()]
+/bookstore/book[last()-1]
+/bookstore/book[position()<3]
+//title[@lang]
+//title[@lang='en']
+/bookstore/book[price>35.00]
+/bookstore/book[price>35.00]/title
+
+* Seleccionando nodos desconocidos
+
+/bookstore/*
+//*
+//title[@*]
+
+* Seleccionar varias rutas
+
+//book/title | //book/price
+//title | //price
+/bookstore/book/title | //price

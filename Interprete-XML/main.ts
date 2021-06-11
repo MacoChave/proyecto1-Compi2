@@ -3,17 +3,26 @@ import { Entorno } from "./AST/Entorno";
 import { Instruccion } from "./Interfaces/Instruccion";
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
+const xpathAsc = require('./Gramatica/xpathAsc');
 
 export class Main {
 
-    Errsemantico:any = {};
+    lexicos:any=[];
 
-    ejecutarCodigo(entrada: any) {
-        console.log('ejecutando parse ...');
+    ejecutarCodigoXmlAsc(entrada: any) {
+        console.log('ejecutando xmlAsc ...');
         const objetos = xmlAsc.parse(entrada);
-        this.Errsemantico = objetos.erroresSemanticos;
-        console.log(this.Errsemantico);
+        console.log(objetos);
+        window.localStorage.setItem('lexicos',JSON.stringify(objetos.erroresLexicos));
+        //this.Errsemantico = objetos.erroresSemanticos;
+        //console.log(this.Errsemantico);
         //console.log(objetos);
+    }
+
+    ejecutarCodigoXpathAsc(entrada: any) {
+        console.log('ejecutando xpathAsc ...');
+        const objetos = xpathAsc.parse(entrada);
+        console.log(objetos);
     }
 
     readFile(e: any) {
@@ -44,7 +53,38 @@ export class Main {
         console.log("hola mundo");
     }
 
+    getErroresLexicos(){
+        let lex = window.localStorage.getItem('lexicos');
+        if (lex){
+            this.lexicos =  JSON.parse(lex); 
+            console.log(this.lexicos);
+
+            var tbodyRef:any = document.getElementById('keywords');
+            let i = 1;
+            this.lexicos.forEach((element:any) => {
+    
+                let newRow = tbodyRef.insertRow();
+                let newCell = newRow.insertCell();
+                let newText2 = document.createTextNode(element.descripcion);
+                newCell.appendChild(newText2);
+            });
+    
+
+        }
+
+
+
+
+
+        //setup our table array
+
+    
+        
+    }
+
     setListener() {
+
+
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
@@ -56,9 +96,20 @@ export class Main {
             console.log("btn xmlAsc activo");
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
-                let codeBlock = document.getElementById('codeBlock');
+                let codeBlock:any = document.getElementById('codeBlock');
                 let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
-                this.ejecutarCodigo(content);
+                this.ejecutarCodigoXmlAsc(content);
+            });
+        }
+
+        let analizeXPathAsc = document.getElementById('analizeXPathAsc');
+        if (analizeXPathAsc !== undefined && analizeXPathAsc !== null) {
+            console.log("btn xpathAsc activo");
+            analizeXPathAsc.addEventListener('click', () => {
+                // ANALIZAR XML
+                let input:any = document.getElementById('codeXPath');
+                let content = input !== undefined && input !== null ? input.value : '';
+                this.ejecutarCodigoXpathAsc(content);
             });
         }
 
@@ -66,10 +117,19 @@ export class Main {
         if (clean !== undefined && clean !== null) {
             console.log("btn clean activo");
             clean.addEventListener('click', () => {
-                let codeBlock = document.getElementById('codeBlock');
+                let codeBlock:any = document.getElementById('codeBlock');
                 if (codeBlock !== undefined && codeBlock !== null) {
                     codeBlock.value = '';
                 };
+            });
+        }
+
+
+        let tablaErrores = document.getElementById('tablaErrores');
+        if (tablaErrores !== undefined && tablaErrores !== null) {
+            console.log("btn Tabla Errores Activo");
+            tablaErrores.addEventListener('click', () => {
+                this.getErroresLexicos();
             });
         }
     }
