@@ -13,13 +13,17 @@ class Main {
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
+        window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
         this.lista_objetos = objetos.objeto;
-        console.log(this.lista_objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
-        //this.Errsemantico = objetos.erroresSemanticos;
-        //console.log(this.Errsemantico);
-        //console.log(objetos);
+        if (objetos !== undefined) {
+            let reporteGramatical = "";
+            for (let i = objetos.reporteGramatical.length - 1; i >= 0; i--) {
+                reporteGramatical += objetos.reporteGramatical[i];
+            }
+            window.localStorage.setItem('reporteGramatical', reporteGramatical);
+        }
     }
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
@@ -99,8 +103,8 @@ class Main {
         });
         window.localStorage.setItem('nodos', JSON.stringify(this.nodos));
         window.localStorage.setItem('edges', JSON.stringify(this.edges));
-        console.log(this.nodos);
-        console.log(this.edges);
+        //console.log(this.nodos);
+        //console.log(this.edges);
     }
     getAtributos(listaObjeto, padre) {
         listaObjeto.forEach((element) => {
