@@ -10,9 +10,12 @@ export class Main {
 
     lexicos:any=[];
     lista_objetos:any=[];
+    lista_objetos_xpath:any=[];
     nodos:any=[];
     edges:any=[];
     i:number=1;
+    nodoxpath:any=[];
+    edgesxpath:any=[];
 
     ejecutarCodigoXmlAsc(entrada: any) {
         console.log('ejecutando xmlAsc ...');
@@ -29,7 +32,10 @@ export class Main {
     ejecutarCodigoXpathAsc(entrada: any) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
-        console.log(objetos);
+        this.lista_objetos_xpath = objetos.Nodo;
+        console.log(this.lista_objetos_xpath);
+
+
     }
 
     readFile(e: any) {
@@ -90,6 +96,7 @@ export class Main {
     }
 
     graficar(){
+        this.i =1;
         this.nodos=[];
         this.edges=[];
         
@@ -220,6 +227,78 @@ export class Main {
 
     }
 
+    arbolXpath(){
+        this.i=1;
+        this.nodoxpath=[];
+        this.edgesxpath=[];
+        
+        let aux = {
+            'id':1, 
+            'label':"s"
+        }
+        this.nodoxpath.push(aux);
+
+        let element =  this.lista_objetos_xpath
+        console.log(element);
+        console.log(element.val);
+
+
+            this.i++;
+            let padre =this.i;
+             aux = {
+                'id':padre, 
+                'label':element.val
+            }
+            this.nodoxpath.push(aux);
+            let aux2 = {
+                'from': 1, 
+                'to': this.i
+            }
+            
+
+            this.edgesxpath.push(aux2);
+            this.getObjetosXpath(element.children,padre);
+
+
+   
+
+        window.localStorage.setItem('nodosxpath',JSON.stringify(this.nodoxpath))
+        window.localStorage.setItem('edgesxpath',JSON.stringify(this.edgesxpath))
+
+        console.log(this.nodoxpath);
+        console.log(this.edgesxpath);
+
+    }
+
+    getObjetosXpath(listaObjeto:any, padre:number){
+        listaObjeto.forEach((element:any) => {
+            
+            if(element!=undefined){
+                this.i++;
+                let hijo = this.i;
+                let aux = {
+                    'id':this.i, 
+                    'label':element.val
+                }
+                let aux2 = {
+                    'from': padre, 
+                    'to': this.i
+                }
+                
+    
+                this.nodoxpath.push(aux);
+                this.edgesxpath.push(aux2);
+    
+                this.getObjetosXpath(element.children,this.i);
+
+            }
+
+
+
+        
+            
+        });
+    }
 
     setListener() {
 
@@ -250,6 +329,7 @@ export class Main {
                 let input:any = document.getElementById('codeXPath');
                 let content = input !== undefined && input !== null ? input.value : '';
                 this.ejecutarCodigoXpathAsc(content);
+                this.arbolXpath();
             });
         }
 

@@ -7,9 +7,12 @@ class Main {
     constructor() {
         this.lexicos = [];
         this.lista_objetos = [];
+        this.lista_objetos_xpath = [];
         this.nodos = [];
         this.edges = [];
         this.i = 1;
+        this.nodoxpath = [];
+        this.edgesxpath = [];
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
@@ -24,7 +27,8 @@ class Main {
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
-        console.log(objetos);
+        this.lista_objetos_xpath = objetos.Nodo;
+        console.log(this.lista_objetos_xpath);
     }
     readFile(e) {
         console.log('read file ...');
@@ -71,6 +75,7 @@ class Main {
         //setup our table array
     }
     graficar() {
+        this.i = 1;
         this.nodos = [];
         this.edges = [];
         let aux = {
@@ -164,6 +169,55 @@ class Main {
             }
         });
     }
+    arbolXpath() {
+        this.i = 1;
+        this.nodoxpath = [];
+        this.edgesxpath = [];
+        let aux = {
+            'id': 1,
+            'label': "s"
+        };
+        this.nodoxpath.push(aux);
+        let element = this.lista_objetos_xpath;
+        console.log(element);
+        console.log(element.val);
+        this.i++;
+        let padre = this.i;
+        aux = {
+            'id': padre,
+            'label': element.val
+        };
+        this.nodoxpath.push(aux);
+        let aux2 = {
+            'from': 1,
+            'to': this.i
+        };
+        this.edgesxpath.push(aux2);
+        this.getObjetosXpath(element.children, padre);
+        window.localStorage.setItem('nodosxpath', JSON.stringify(this.nodoxpath));
+        window.localStorage.setItem('edgesxpath', JSON.stringify(this.edgesxpath));
+        console.log(this.nodoxpath);
+        console.log(this.edgesxpath);
+    }
+    getObjetosXpath(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            if (element != undefined) {
+                this.i++;
+                let hijo = this.i;
+                let aux = {
+                    'id': this.i,
+                    'label': element.val
+                };
+                let aux2 = {
+                    'from': padre,
+                    'to': this.i
+                };
+                this.nodoxpath.push(aux);
+                this.edgesxpath.push(aux2);
+                this.getObjetosXpath(element.children, this.i);
+            }
+        });
+    }
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
@@ -189,6 +243,7 @@ class Main {
                 let input = document.getElementById('codeXPath');
                 let content = input !== undefined && input !== null ? input.value : '';
                 this.ejecutarCodigoXpathAsc(content);
+                this.arbolXpath();
             });
         }
         let clean = document.getElementById('clean');
