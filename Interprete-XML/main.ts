@@ -8,25 +8,32 @@ const xpathAsc = require('./Gramatica/xpathAsc');
 
 export class Main {
 
-    lexicos:any=[];
-    lista_objetos:any=[];
-    lista_objetos_xpath:any=[];
-    nodos:any=[];
-    edges:any=[];
-    i:number=1;
+    lexicos: any = [];
+    lista_objetos: any = [];
+    lista_objetos_xpath:any =[];
+    nodos: any = [];
+    edges: any = [];
     nodoxpath:any=[];
     edgesxpath:any=[];
+    
+    i: number = 1;
 
     ejecutarCodigoXmlAsc(entrada: any) {
         console.log('ejecutando xmlAsc ...');
-       
+
+        window.localStorage.setItem('reporteGramatical', '');
+
         const objetos = xmlAsc.parse(entrada);
-        this.lista_objetos=objetos.objeto;
-        console.log(this.lista_objetos)
-        window.localStorage.setItem('lexicos',JSON.stringify(objetos.erroresLexicos));
-        //this.Errsemantico = objetos.erroresSemanticos;
-        //console.log(this.Errsemantico);
-        //console.log(objetos);
+        this.lista_objetos = objetos.objeto;
+        window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
+
+        if (objetos !== undefined) {
+            let reporteGramatical = "";
+            for (let i = objetos.reporteGramatical.length - 1; i >= 0; i--) {
+                reporteGramatical += objetos.reporteGramatical[i];
+            }
+            window.localStorage.setItem('reporteGramatical', reporteGramatical);
+        }
     }
 
     ejecutarCodigoXpathAsc(entrada: any) {
@@ -66,163 +73,141 @@ export class Main {
         console.log("hola mundo");
     }
 
-    getErroresLexicos(){
+    getErroresLexicos() {
         let lex = window.localStorage.getItem('lexicos');
-        if (lex){
-            this.lexicos =  JSON.parse(lex); 
+        if (lex) {
+            this.lexicos = JSON.parse(lex);
             console.log(this.lexicos);
 
-            var tbodyRef:any = document.getElementById('keywords');
+            var tbodyRef: any = document.getElementById('keywords');
             let i = 1;
-            this.lexicos.forEach((element:any) => {
-    
+            this.lexicos.forEach((element: any) => {
+
                 let newRow = tbodyRef.insertRow();
                 let newCell = newRow.insertCell();
                 let newText2 = document.createTextNode(element.descripcion);
                 newCell.appendChild(newText2);
             });
-    
-
         }
-
-
-
-
-
         //setup our table array
-
-    
-        
     }
 
-    graficar(){
-        this.i =1;
-        this.nodos=[];
-        this.edges=[];
-        
+    graficar() {
+        this.nodos = [];
+        this.edges = [];
+
         let aux = {
-            'id':1, 
-            'label':"s"
+            'id': 1,
+            'label': "s"
         }
         this.nodos.push(aux);
 
-        this.lista_objetos.forEach((element:any) => {
-           // console.log(element.identificador);
+        this.lista_objetos.forEach((element: any) => {
+            // console.log(element.identificador);
 
 
             this.i++;
-            let padre =this.i;
+            let padre = this.i;
             let aux = {
-                'id':padre, 
-                'label':element.identificador
+                'id': padre,
+                'label': element.identificador
             }
             this.nodos.push(aux);
             let aux2 = {
-                'from': 1, 
+                'from': 1,
                 'to': this.i
             }
-            
+
 
             this.edges.push(aux2);
-            this.getObjetos(element.listaObjetos,padre);
-            if(element.listaAtributos){
-                this.getAtributos(element.listaAtributos,padre);
+            this.getObjetos(element.listaObjetos, padre);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, padre);
             }
 
-            
+
         });
 
-        window.localStorage.setItem('nodos',JSON.stringify(this.nodos))
-        window.localStorage.setItem('edges',JSON.stringify(this.edges))
+        window.localStorage.setItem('nodos', JSON.stringify(this.nodos))
+        window.localStorage.setItem('edges', JSON.stringify(this.edges))
 
-        console.log(this.nodos);
-        console.log(this.edges);
+        //console.log(this.nodos);
+        //console.log(this.edges);
     }
 
-    getAtributos(listaObjeto:any,padre:number){
-        listaObjeto.forEach((element:any) => {
+    getAtributos(listaObjeto: any, padre: number) {
+        listaObjeto.forEach((element: any) => {
             this.i++;
-            let hijo=this.i;
+            let hijo = this.i;
             let aux = {
-                'id':hijo, 
-                'label':element.identificador
+                'id': hijo,
+                'label': element.identificador
             }
             let aux2 = {
-                'from': padre, 
+                'from': padre,
                 'to': hijo
             }
             this.nodos.push(aux);
             this.edges.push(aux2);
-            
-            if(element.textWithoutSpecial!=""){
+
+            if (element.textWithoutSpecial != "") {
                 this.i++;
-                aux={
-                    'id':this.i,
-                    'label':element.textWithoutSpecial
+                aux = {
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
                 }
-                aux2= {
+                aux2 = {
                     'from': hijo,
-                    'to':  this.i
+                    'to': this.i
                 }
 
                 this.nodos.push(aux);
                 this.edges.push(aux2);
-            
+
             }
 
-            
+
         });
 
     }
 
-    getObjetos(listaObjeto:any,padre:number){
-        
-        listaObjeto.forEach((element:any) => {
+    getObjetos(listaObjeto: any, padre: number) {
+
+        listaObjeto.forEach((element: any) => {
             this.i++;
             let hijo = this.i;
             let aux = {
-                'id':this.i, 
-                'label':element.identificador
+                'id': this.i,
+                'label': element.identificador
             }
             let aux2 = {
-                'from': padre, 
+                'from': padre,
                 'to': this.i
             }
-            
+
 
             this.nodos.push(aux);
             this.edges.push(aux2);
 
 
-            if(element.textWithoutSpecial!=""){
+            if (element.textWithoutSpecial != "") {
                 this.i++;
-                aux={
-                    'id':this.i,
-                    'label':element.textWithoutSpecial
+                aux = {
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
                 }
-                aux2= {
+                aux2 = {
                     'from': hijo,
-                    'to':  this.i
+                    'to': this.i
                 }
-
                 this.nodos.push(aux);
                 this.edges.push(aux2);
-            
             }
 
-
-
-
-
-            this.getObjetos(element.listaObjetos,this.i);
-
-            if(element.listaAtributos){
-                this.getAtributos(element.listaAtributos,hijo);
+            this.getObjetos(element.listaObjetos, this.i);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, hijo);
             }
-            
-            
-
-            
         });
 
     }
@@ -301,8 +286,6 @@ export class Main {
     }
 
     setListener() {
-
-
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
@@ -314,7 +297,7 @@ export class Main {
             console.log("btn xmlAsc activo");
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
-                let codeBlock:any = document.getElementById('codeBlock');
+                let codeBlock: any = document.getElementById('codeBlock');
                 let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
                 this.ejecutarCodigoXmlAsc(content);
                 this.graficar();
@@ -326,7 +309,7 @@ export class Main {
             console.log("btn xpathAsc activo");
             analizeXPathAsc.addEventListener('click', () => {
                 // ANALIZAR XML
-                let input:any = document.getElementById('codeXPath');
+                let input: any = document.getElementById('codeXPath');
                 let content = input !== undefined && input !== null ? input.value : '';
                 this.ejecutarCodigoXpathAsc(content);
                 this.arbolXpath();
@@ -337,13 +320,12 @@ export class Main {
         if (clean !== undefined && clean !== null) {
             console.log("btn clean activo");
             clean.addEventListener('click', () => {
-                let codeBlock:any = document.getElementById('codeBlock');
+                let codeBlock: any = document.getElementById('codeBlock');
                 if (codeBlock !== undefined && codeBlock !== null) {
                     codeBlock.value = '';
                 };
             });
         }
-
 
         let tablaErrores = document.getElementById('tablaErrores');
         if (tablaErrores !== undefined && tablaErrores !== null) {
