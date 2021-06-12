@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+ <head>
+  <title>vis.js Graph demo</title>
+  <script src="vis/vis.js"></script>
+  <link href="vis/vis.css" rel="stylesheet" type="text/css" />
+ </head>
+
+ <body>
+ <div id="graph"></div> 
+  <script type="text/javascript">
+
+   var nodes = [
+    {id: 1, label: 'a'},
+    {id: 2, label: 'b'},
+    {id: 3, label: 'c'},
+   ];
+
+   var edges = [
+    {from: 1, to: 2},
+    {from: 1, to: 3},
+    {from: 2, to: 3},
+   ];
+
+   var container = document.getElementById('graph');
+
+   var data = {
+    nodes: nodes,
+    edges: edges,
+   };
+
+   var graph = new vis.Network(container, data, {});
+
+  </script>
+ </body>
+</html>

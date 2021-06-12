@@ -6,11 +6,16 @@ const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
     constructor() {
         this.lexicos = [];
+        this.lista_objetos = [];
+        this.nodos = [];
+        this.edges = [];
+        this.i = 1;
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
         const objetos = xmlAsc.parse(entrada);
-        console.log(objetos);
+        this.lista_objetos = objetos.objeto;
+        console.log(this.lista_objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         //this.Errsemantico = objetos.erroresSemanticos;
         //console.log(this.Errsemantico);
@@ -65,6 +70,100 @@ class Main {
         }
         //setup our table array
     }
+    graficar() {
+        this.nodos = [];
+        this.edges = [];
+        let aux = {
+            'id': 1,
+            'label': "s"
+        };
+        this.nodos.push(aux);
+        this.lista_objetos.forEach((element) => {
+            // console.log(element.identificador);
+            this.i++;
+            let padre = this.i;
+            let aux = {
+                'id': padre,
+                'label': element.identificador
+            };
+            this.nodos.push(aux);
+            let aux2 = {
+                'from': 1,
+                'to': this.i
+            };
+            this.edges.push(aux2);
+            this.getObjetos(element.listaObjetos, padre);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, padre);
+            }
+        });
+        window.localStorage.setItem('nodos', JSON.stringify(this.nodos));
+        window.localStorage.setItem('edges', JSON.stringify(this.edges));
+        console.log(this.nodos);
+        console.log(this.edges);
+    }
+    getAtributos(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            this.i++;
+            let hijo = this.i;
+            let aux = {
+                'id': hijo,
+                'label': element.identificador
+            };
+            let aux2 = {
+                'from': padre,
+                'to': hijo
+            };
+            this.nodos.push(aux);
+            this.edges.push(aux2);
+            if (element.textWithoutSpecial != "") {
+                this.i++;
+                aux = {
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
+                };
+                aux2 = {
+                    'from': hijo,
+                    'to': this.i
+                };
+                this.nodos.push(aux);
+                this.edges.push(aux2);
+            }
+        });
+    }
+    getObjetos(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            this.i++;
+            let hijo = this.i;
+            let aux = {
+                'id': this.i,
+                'label': element.identificador
+            };
+            let aux2 = {
+                'from': padre,
+                'to': this.i
+            };
+            this.nodos.push(aux);
+            this.edges.push(aux2);
+            if (element.textWithoutSpecial != "") {
+                this.i++;
+                aux = {
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
+                };
+                aux2 = {
+                    'from': hijo,
+                    'to': this.i
+                };
+                this.nodos.push(aux);
+                this.edges.push(aux2);
+            }
+            this.getObjetos(element.listaObjetos, this.i);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, hijo);
+            }
+        });
+    }
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
@@ -79,6 +178,7 @@ class Main {
                 let codeBlock = document.getElementById('codeBlock');
                 let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
                 this.ejecutarCodigoXmlAsc(content);
+                this.graficar();
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
