@@ -22,7 +22,8 @@ var TypeOperation;
     TypeOperation[TypeOperation["ID"] = 16] = "ID";
     TypeOperation[TypeOperation["LAST"] = 17] = "LAST";
     TypeOperation[TypeOperation["POSITION"] = 18] = "POSITION";
-    TypeOperation[TypeOperation["ATRIBUTO"] = 19] = "ATRIBUTO";
+    TypeOperation[TypeOperation["TEXT"] = 19] = "TEXT";
+    TypeOperation[TypeOperation["ATRIBUTO"] = 20] = "ATRIBUTO";
 })(TypeOperation = exports.TypeOperation || (exports.TypeOperation = {}));
 var TypeElement;
 (function (TypeElement) {
