@@ -115,10 +115,11 @@ START :
 
 PATHS : 
         PATHS '|' PATH          { 
-                                    $$ = $1.push($3) 
+                                    $1.push($3) 
+                                    $$ = $1
                                     var nodo = {
-                                        name: 'PATH', 
-                                        val: 'PATH', 
+                                        name: 'PATHS', 
+                                        val: 'PATHS', 
                                         children: [
                                             xPathAscAST,
                                             {name: '|', val: '|', children: []},
@@ -129,7 +130,7 @@ PATHS :
                                 }
         | PATH                  { 
                                     $$ = [$1] 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST]}
+                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST]}
                                     xPathAscAST = nodo
                                 }
         ;

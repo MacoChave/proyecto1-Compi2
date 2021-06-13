@@ -1643,10 +1643,11 @@ case 1:
 break;
 case 2:
  
-                                    this.$ = $$[$0-2].push($$[$0]) 
+                                    $$[$0-2].push($$[$0]) 
+                                    this.$ = $$[$0-2]
                                     var nodo = {
-                                        name: 'PATH', 
-                                        val: 'PATH', 
+                                        name: 'PATHS', 
+                                        val: 'PATHS', 
                                         children: [
                                             xPathAscAST,
                                             {name: '|', val: '|', children: []},
@@ -1659,7 +1660,7 @@ break;
 case 3:
  
                                     this.$ = [$$[$0]] 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST]}
+                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST]}
                                     xPathAscAST = nodo
                                 
 break;
@@ -3015,6 +3016,7 @@ class Main {
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
         const objetos = xmlAsc.parse(entrada);
+        this.xmlAsc_obj = objetos;
         console.log(objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         //this.Errsemantico = objetos.erroresSemanticos;
@@ -3024,6 +3026,7 @@ class Main {
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
+        this.xpathAsc_obj = objetos;
         console.log(objetos);
     }
     readFile(e) {
@@ -3052,7 +3055,7 @@ class Main {
         reader.readAsText(file);
     }
     prueba() {
-        console.log("hola mundo");
+        console.log('hola mundo');
     }
     getErroresLexicos() {
         let lex = window.localStorage.getItem('lexicos');
@@ -3074,21 +3077,23 @@ class Main {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
-            console.log("inputFile activo");
+            console.log('inputFile activo');
         }
         let analizeXmlAsc = document.getElementById('analizeXmlAsc');
         if (analizeXmlAsc !== undefined && analizeXmlAsc !== null) {
-            console.log("btn xmlAsc activo");
+            console.log('btn xmlAsc activo');
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
-                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
+                let content = codeBlock !== undefined && codeBlock !== null
+                    ? codeBlock.value
+                    : '';
                 this.ejecutarCodigoXmlAsc(content);
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
         if (analizeXPathAsc !== undefined && analizeXPathAsc !== null) {
-            console.log("btn xpathAsc activo");
+            console.log('btn xpathAsc activo');
             analizeXPathAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let input = document.getElementById('codeXPath');
@@ -3098,22 +3103,24 @@ class Main {
         }
         let clean = document.getElementById('clean');
         if (clean !== undefined && clean !== null) {
-            console.log("btn clean activo");
+            console.log('btn clean activo');
             clean.addEventListener('click', () => {
                 let codeBlock = document.getElementById('codeBlock');
                 if (codeBlock !== undefined && codeBlock !== null) {
                     codeBlock.value = '';
                 }
-                ;
             });
         }
         let tablaErrores = document.getElementById('tablaErrores');
         if (tablaErrores !== undefined && tablaErrores !== null) {
-            console.log("btn Tabla Errores Activo");
+            console.log('btn Tabla Errores Activo');
             tablaErrores.addEventListener('click', () => {
                 this.getErroresLexicos();
             });
         }
+    }
+    filterForXpath() {
+        console.log(this.xpathAsc_obj.XPath);
     }
 }
 exports.Main = Main;
