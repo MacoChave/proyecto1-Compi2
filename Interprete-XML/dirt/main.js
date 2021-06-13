@@ -23,7 +23,7 @@ class Main {
         console.log(this.lista_objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         if (objetos !== undefined) {
-            let reporteGramatical = '';
+            let reporteGramatical = "";
             for (let i = objetos.reporteGramatical.length - 1; i >= 0; i--) {
                 reporteGramatical += objetos.reporteGramatical[i];
             }
@@ -62,7 +62,7 @@ class Main {
         reader.readAsText(file);
     }
     prueba() {
-        console.log('hola mundo');
+        console.log("hola mundo");
     }
     getErroresLexicos() {
         let lex = window.localStorage.getItem('lexicos');
@@ -152,8 +152,8 @@ class Main {
         this.nodos = [];
         this.edges = [];
         let aux = {
-            id: 1,
-            label: 's',
+            'id': 1,
+            'label': "s"
         };
         this.nodos.push(aux);
         this.lista_objetos.forEach((element) => {
@@ -161,13 +161,13 @@ class Main {
             this.i++;
             let padre = this.i;
             let aux = {
-                id: padre,
-                label: element.identificador,
+                'id': padre,
+                'label': element.identificador
             };
             this.nodos.push(aux);
             let aux2 = {
-                from: 1,
-                to: this.i,
+                'from': 1,
+                'to': this.i
             };
             this.edges.push(aux2);
             this.getObjetos(element.listaObjetos, padre);
@@ -185,24 +185,24 @@ class Main {
             this.i++;
             let hijo = this.i;
             let aux = {
-                id: hijo,
-                label: element.identificador,
+                'id': hijo,
+                'label': element.identificador
             };
             let aux2 = {
-                from: padre,
-                to: hijo,
+                'from': padre,
+                'to': hijo
             };
             this.nodos.push(aux);
             this.edges.push(aux2);
-            if (element.textWithoutSpecial != '') {
+            if (element.textWithoutSpecial != "") {
                 this.i++;
                 aux = {
-                    id: this.i,
-                    label: element.textWithoutSpecial,
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
                 };
                 aux2 = {
-                    from: hijo,
-                    to: this.i,
+                    'from': hijo,
+                    'to': this.i
                 };
                 this.nodos.push(aux);
                 this.edges.push(aux2);
@@ -214,24 +214,24 @@ class Main {
             this.i++;
             let hijo = this.i;
             let aux = {
-                id: this.i,
-                label: element.identificador,
+                'id': this.i,
+                'label': element.identificador
             };
             let aux2 = {
-                from: padre,
-                to: this.i,
+                'from': padre,
+                'to': this.i
             };
             this.nodos.push(aux);
             this.edges.push(aux2);
-            if (element.textWithoutSpecial != '') {
+            if (element.textWithoutSpecial != "") {
                 this.i++;
                 aux = {
-                    id: this.i,
-                    label: element.textWithoutSpecial,
+                    'id': this.i,
+                    'label': element.textWithoutSpecial
                 };
                 aux2 = {
-                    from: hijo,
-                    to: this.i,
+                    'from': hijo,
+                    'to': this.i
                 };
                 this.nodos.push(aux);
                 this.edges.push(aux2);
@@ -247,8 +247,8 @@ class Main {
         this.nodoxpath = [];
         this.edgesxpath = [];
         let aux = {
-            id: 1,
-            label: 's',
+            'id': 1,
+            'label': "s"
         };
         this.nodoxpath.push(aux);
         let element = this.lista_objetos_xpath;
@@ -257,13 +257,13 @@ class Main {
         this.i++;
         let padre = this.i;
         aux = {
-            id: padre,
-            label: element.val,
+            'id': padre,
+            'label': element.val
         };
         this.nodoxpath.push(aux);
         let aux2 = {
-            from: 1,
-            to: this.i,
+            'from': 1,
+            'to': this.i
         };
         this.edgesxpath.push(aux2);
         this.getObjetosXpath(element.children, padre);
@@ -278,12 +278,12 @@ class Main {
                 this.i++;
                 let hijo = this.i;
                 let aux = {
-                    id: this.i,
-                    label: element.val,
+                    'id': this.i,
+                    'label': element.val
                 };
                 let aux2 = {
-                    from: padre,
-                    to: this.i,
+                    'from': padre,
+                    'to': this.i
                 };
                 this.nodoxpath.push(aux);
                 this.edgesxpath.push(aux2);
@@ -295,24 +295,22 @@ class Main {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
             inputFile.addEventListener('change', this.readFile, false);
-            console.log('inputFile activo');
+            console.log("inputFile activo");
         }
         let analizeXmlAsc = document.getElementById('analizeXmlAsc');
         if (analizeXmlAsc !== undefined && analizeXmlAsc !== null) {
-            console.log('btn xmlAsc activo');
+            console.log("btn xmlAsc activo");
             analizeXmlAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let codeBlock = document.getElementById('codeBlock');
-                let content = codeBlock !== undefined && codeBlock !== null
-                    ? codeBlock.value
-                    : '';
+                let content = codeBlock !== undefined && codeBlock !== null ? codeBlock.value : '';
                 this.ejecutarCodigoXmlAsc(content);
                 this.graficar();
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
         if (analizeXPathAsc !== undefined && analizeXPathAsc !== null) {
-            console.log('btn xpathAsc activo');
+            console.log("btn xpathAsc activo");
             analizeXPathAsc.addEventListener('click', () => {
                 // ANALIZAR XML
                 let input = document.getElementById('codeXPath');
@@ -323,17 +321,18 @@ class Main {
         }
         let clean = document.getElementById('clean');
         if (clean !== undefined && clean !== null) {
-            console.log('btn clean activo');
+            console.log("btn clean activo");
             clean.addEventListener('click', () => {
                 let codeBlock = document.getElementById('codeBlock');
                 if (codeBlock !== undefined && codeBlock !== null) {
                     codeBlock.value = '';
                 }
+                ;
             });
         }
         let tablaErrores = document.getElementById('tablaErrores');
         if (tablaErrores !== undefined && tablaErrores !== null) {
-            console.log('btn Tabla Errores Activo');
+            console.log("btn Tabla Errores Activo");
             tablaErrores.addEventListener('click', () => {
                 this.getErroresLexicos();
             });
