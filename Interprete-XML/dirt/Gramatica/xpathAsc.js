@@ -106,10 +106,11 @@ case 1:
 break;
 case 2:
  
-                                    this.$ = $$[$0-2].push($$[$0]) 
+                                    $$[$0-2].push($$[$0]) 
+                                    this.$ = $$[$0-2]
                                     var nodo = {
-                                        name: 'PATH', 
-                                        val: 'PATH', 
+                                        name: 'PATHS', 
+                                        val: 'PATHS', 
                                         children: [
                                             xPathAscAST,
                                             {name: '|', val: '|', children: []},
@@ -122,7 +123,7 @@ break;
 case 3:
  
                                     this.$ = [$$[$0]] 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST]}
+                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST]}
                                     xPathAscAST = nodo
                                 
 break;
