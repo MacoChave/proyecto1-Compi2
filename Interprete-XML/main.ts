@@ -7,28 +7,41 @@ const xpathAsc = require('./Gramatica/xpathAsc');
 
 export class Main {
 	lexicos: any = [];
-	xmlAsc_obj: any;
-	xpathAsc_obj: any;
+	lista_objetos: any = [];
+	lista_objetos_xpath: any = [];
+	nodos: any = [];
+	edges: any = [];
+	nodoxpath: any = [];
+	edgesxpath: any = [];
+
+	i: number = 1;
 
 	ejecutarCodigoXmlAsc(entrada: any) {
 		console.log('ejecutando xmlAsc ...');
+
+		window.localStorage.setItem('reporteGramatical', '');
+
 		const objetos = xmlAsc.parse(entrada);
-		this.xmlAsc_obj = objetos;
-		console.log(objetos);
+		this.lista_objetos = objetos.objeto;
 		window.localStorage.setItem(
 			'lexicos',
 			JSON.stringify(objetos.erroresLexicos)
 		);
-		//this.Errsemantico = objetos.erroresSemanticos;
-		//console.log(this.Errsemantico);
-		//console.log(objetos);
+
+		if (objetos !== undefined) {
+			let reporteGramatical = '';
+			for (let i = objetos.reporteGramatical.length - 1; i >= 0; i--) {
+				reporteGramatical += objetos.reporteGramatical[i];
+			}
+			window.localStorage.setItem('reporteGramatical', reporteGramatical);
+		}
 	}
 
 	ejecutarCodigoXpathAsc(entrada: any) {
 		console.log('ejecutando xpathAsc ...');
 		const objetos = xpathAsc.parse(entrada);
-		this.xpathAsc_obj = objetos;
-		console.log(objetos);
+		this.lista_objetos_xpath = objetos.Nodo;
+		console.log(this.lista_objetos_xpath);
 	}
 
 	readFile(e: any) {
@@ -73,8 +86,180 @@ export class Main {
 				newCell.appendChild(newText2);
 			});
 		}
-
 		//setup our table array
+	}
+
+	graficar() {
+		this.nodos = [];
+		this.edges = [];
+
+		let aux = {
+			id: 1,
+			label: 's',
+		};
+		this.nodos.push(aux);
+
+		this.lista_objetos.forEach((element: any) => {
+			// console.log(element.identificador);
+
+			this.i++;
+			let padre = this.i;
+			let aux = {
+				id: padre,
+				label: element.identificador,
+			};
+			this.nodos.push(aux);
+			let aux2 = {
+				from: 1,
+				to: this.i,
+			};
+
+			this.edges.push(aux2);
+			this.getObjetos(element.listaObjetos, padre);
+			if (element.listaAtributos) {
+				this.getAtributos(element.listaAtributos, padre);
+			}
+		});
+
+		window.localStorage.setItem('nodos', JSON.stringify(this.nodos));
+		window.localStorage.setItem('edges', JSON.stringify(this.edges));
+
+		//console.log(this.nodos);
+		//console.log(this.edges);
+	}
+
+	getAtributos(listaObjeto: any, padre: number) {
+		listaObjeto.forEach((element: any) => {
+			this.i++;
+			let hijo = this.i;
+			let aux = {
+				id: hijo,
+				label: element.identificador,
+			};
+			let aux2 = {
+				from: padre,
+				to: hijo,
+			};
+			this.nodos.push(aux);
+			this.edges.push(aux2);
+
+			if (element.textWithoutSpecial != '') {
+				this.i++;
+				aux = {
+					id: this.i,
+					label: element.textWithoutSpecial,
+				};
+				aux2 = {
+					from: hijo,
+					to: this.i,
+				};
+
+				this.nodos.push(aux);
+				this.edges.push(aux2);
+			}
+		});
+	}
+
+	getObjetos(listaObjeto: any, padre: number) {
+		listaObjeto.forEach((element: any) => {
+			this.i++;
+			let hijo = this.i;
+			let aux = {
+				id: this.i,
+				label: element.identificador,
+			};
+			let aux2 = {
+				from: padre,
+				to: this.i,
+			};
+
+			this.nodos.push(aux);
+			this.edges.push(aux2);
+
+			if (element.textWithoutSpecial != '') {
+				this.i++;
+				aux = {
+					id: this.i,
+					label: element.textWithoutSpecial,
+				};
+				aux2 = {
+					from: hijo,
+					to: this.i,
+				};
+				this.nodos.push(aux);
+				this.edges.push(aux2);
+			}
+
+			this.getObjetos(element.listaObjetos, this.i);
+			if (element.listaAtributos) {
+				this.getAtributos(element.listaAtributos, hijo);
+			}
+		});
+	}
+
+	arbolXpath() {
+		this.i = 1;
+		this.nodoxpath = [];
+		this.edgesxpath = [];
+
+		let aux = {
+			id: 1,
+			label: 's',
+		};
+		this.nodoxpath.push(aux);
+
+		let element = this.lista_objetos_xpath;
+		console.log(element);
+		console.log(element.val);
+
+		this.i++;
+		let padre = this.i;
+		aux = {
+			id: padre,
+			label: element.val,
+		};
+		this.nodoxpath.push(aux);
+		let aux2 = {
+			from: 1,
+			to: this.i,
+		};
+
+		this.edgesxpath.push(aux2);
+		this.getObjetosXpath(element.children, padre);
+
+		window.localStorage.setItem(
+			'nodosxpath',
+			JSON.stringify(this.nodoxpath)
+		);
+		window.localStorage.setItem(
+			'edgesxpath',
+			JSON.stringify(this.edgesxpath)
+		);
+
+		console.log(this.nodoxpath);
+		console.log(this.edgesxpath);
+	}
+
+	getObjetosXpath(listaObjeto: any, padre: number) {
+		listaObjeto.forEach((element: any) => {
+			if (element != undefined) {
+				this.i++;
+				let hijo = this.i;
+				let aux = {
+					id: this.i,
+					label: element.val,
+				};
+				let aux2 = {
+					from: padre,
+					to: this.i,
+				};
+
+				this.nodoxpath.push(aux);
+				this.edgesxpath.push(aux2);
+
+				this.getObjetosXpath(element.children, this.i);
+			}
+		});
 	}
 
 	setListener() {
@@ -95,6 +280,7 @@ export class Main {
 						? codeBlock.value
 						: '';
 				this.ejecutarCodigoXmlAsc(content);
+				this.graficar();
 			});
 		}
 
@@ -107,6 +293,7 @@ export class Main {
 				let content =
 					input !== undefined && input !== null ? input.value : '';
 				this.ejecutarCodigoXpathAsc(content);
+				this.arbolXpath();
 			});
 		}
 
@@ -128,9 +315,5 @@ export class Main {
 				this.getErroresLexicos();
 			});
 		}
-	}
-
-	filterForXpath() {
-		console.log(this.xpathAsc_obj.XPath);
 	}
 }

@@ -883,23 +883,35 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
  
+                                                                                    reporteGramatical.push('<tr> <td>START</td> <td>RAIZ</td> </tr>');
                                                                                     this.$ = { objeto: $$[$0-1],
                                                                                         erroresSemanticos: erroresSemanticos,
-                                                                                        erroresLexicos: erroresLexicos
+                                                                                        erroresLexicos: erroresLexicos,
+                                                                                        reporteGramatical: reporteGramatical
                                                                                         };
                                                                                     erroresLexicos = [];
                                                                                     erroresSemanticos = [];
+                                                                                    reporteGramatical = [];
                                                                                     return this.$;
                                                                                
 break;
 case 2:
- this.$ = [$$[$0-1],$$[$0]]; 
+
+                                                                                    this.$ = [$$[$0-1],$$[$0]];
+                                                                                    reporteGramatical.push('<tr> <td>RAIZ</td> <td>HEAD OBJETO</td> </tr>');
+                                                                               
 break;
-case 3: case 10: case 14:
- this.$ = [$$[$0]]; 
+case 3:
+
+                                                                                    this.$ = [$$[$0]];
+                                                                                    reporteGramatical.push('<tr> <td>RAIZ</td> <td>OBJETO</td> </tr>');
+                                                                               
 break;
 case 4:
- this.$ = new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2],[],Etiqueta.HEADER); 
+
+                                                                                    this.$ = new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2],[],Etiqueta.HEADER);
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               
 break;
 case 5:
 
@@ -907,6 +919,7 @@ case 5:
                                                                                     if($$[$0-7] !== $$[$0-1]){
                                                                                         erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
                                                                                     }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
                                                                                
 break;
 case 6:
@@ -915,6 +928,7 @@ case 6:
                                                                                     if($$[$0-6] !== $$[$0-1]){
                                                                                         erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
                                                                                     }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div identifier gt</td> </tr>');
                                                                                
 break;
 case 7:
@@ -923,54 +937,285 @@ case 7:
                                                                                     if($$[$0-7] !== $$[$0-1]){
                                                                                         erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
                                                                                     }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
                                                                                
 break;
 case 8:
- this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],Etiqueta.UNICA); 
-break;
-case 9: case 13:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
-break;
-case 11:
- this.$ = $$[$0]; 
-break;
-case 12:
- this.$ = []; 
-break;
-case 15:
- this.$ = new Atributo($$[$0-2], $$[$0].valor, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0].comilla); 
-break;
-case 16:
- this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE); 
-break;
-case 17:
- this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.SIMPLE); 
-break;
-case 18: case 25: case 32:
 
-                                                                                        if(_$[$0-1].last_line == _$[$0].first_line){ 
-                                                                                            if(_$[$0-1].last_column < _$[$0].first_column ){
-                                                                                                for(let i = 0, size = _$[$0].first_column - _$[$0-1].last_column; i < size; i++ ){
-                                                                                                    $$[$0-1] = $$[$0-1] + ' ';
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            for(let i = 0, size = _$[$0].first_line - _$[$0-1].last_line; i < size; i++ ){
-                                                                                                $$[$0-1] = $$[$0-1] + '\n';
-                                                                                            }
-                                                                                        }
-                                                                                        $$[$0-1] = $$[$0-1] + $$[$0];
-                                                                                        this.$ = $$[$0-1];
+                                                                                    this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],Etiqueta.UNICA);
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS div gt</td> </tr>');
                                                                                
 break;
-case 19: case 20: case 21: case 22: case 26: case 27: case 28: case 29: case 33: case 34: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47:
- this.$ = $$[$0] 
+case 9:
+
+                                                                                    $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+                                                                                    reporteGramatical.push('<tr> <td>OBJETOS</td> <td>OBJETOS OBJETO</td> </tr>');
+                                                                               
 break;
-case 23: case 30:
-this.$ = $$[$0]
+case 10:
+
+                                                                                    this.$ = [$$[$0]];
+                                                                                    reporteGramatical.push('<tr> <td>OBJETOS</td> <td>OBJETO</td> </tr>');
+                                                                               
 break;
-case 24: case 31:
-this.$ = ''
+case 11:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>LATRIBUTOS</td> <td>ATRIBUTOS</td> </tr>');
+                                                                               
+break;
+case 12:
+
+                                                                                    this.$ = [];
+                                                                                    reporteGramatical.push('<tr> <td>LATRIBUTOS</td> <td>Epsilon</td> </tr>');
+                                                                               
+break;
+case 13:
+
+                                                                                    $$[$0-1].push($$[$0]);
+                                                                                    this.$ = $$[$0-1];
+                                                                                    reporteGramatical.push('<tr> <td>ATRIBUTOS</td> <td>ATRIBUTOS ATRIBUTO</td> </tr>');
+                                                                               
+break;
+case 14:
+
+                                                                                    this.$ = [$$[$0]];
+                                                                                    reporteGramatical.push('<tr> <td>ATRIBUTOS</td> <td>ATRIBUTO</td> </tr>');
+                                                                               
+break;
+case 15:
+
+                                                                                    this.$ = new Atributo($$[$0-2], $$[$0].valor, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0].comilla);
+                                                                                    reporteGramatical.push('<tr> <td>ATRIBUTO</td> <td>identifier asig FIN_ATRIBUTO</td> </tr>');
+                                                                               
+break;
+case 16:
+
+                                                                                    this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE);
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>qmrk CONTENIDO_ATRB qmrk</td> </tr>');
+                                                                               
+break;
+case 17:
+ 
+                                                                                    this.$ = new Atributo($$[$0-2], $$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, Comilla.SIMPLE);
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>apost CONTENIDO_ATRB_SMPL apost</td> </tr>');
+                                                                               
+break;
+case 18:
+
+                                                                                    if(_$[$0-1].last_line == _$[$0].first_line){ 
+                                                                                        if(_$[$0-1].last_column < _$[$0].first_column ){
+                                                                                            for(let i = 0, size = _$[$0].first_column - _$[$0-1].last_column; i < size; i++ ){
+                                                                                                $$[$0-1] = $$[$0-1] + ' ';
+                                                                                            }
+                                                                                        }
+                                                                                    } else {
+                                                                                        for(let i = 0, size = _$[$0].first_line - _$[$0-1].last_line; i < size; i++ ){
+                                                                                            $$[$0-1] = $$[$0-1] + '\n';
+                                                                                        }
+                                                                                    }
+                                                                                    $$[$0-1] = $$[$0-1] + $$[$0];
+                                                                                    this.$ = $$[$0-1];
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_OBJ</td> <td>CONTENIDO_OBJ VALUES_CONT_OBJ</td> </tr>');
+                                                                               
+break;
+case 19:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_OBJ</td> <td>VALUES_CONT_OBJ</td> </tr>');
+                                                                               
+break;
+case 20:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>VALUE</td> </tr>');
+                                                                               
+break;
+case 21:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>qmrk</td> </tr>');
+                                                                               
+break;
+case 22:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>apost</td> </tr>');
+                                                                               
+break;
+case 23:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_ATRB</td> <td>LISTA_CONT_ATRB</td> </tr>');
+                                                                               
+break;
+case 24:
+
+                                                                                    this.$ = '';
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_ATRB</td> <td>Epsilon</td> </tr>');
+                                                                               
+break;
+case 25:
+
+                                                                                    if(_$[$0-1].last_line == _$[$0].first_line){ 
+                                                                                        if(_$[$0-1].last_column < _$[$0].first_column ){
+                                                                                            for(let i = 0, size = _$[$0].first_column - _$[$0-1].last_column; i < size; i++ ){
+                                                                                                $$[$0-1] = $$[$0-1] + ' ';
+                                                                                            }
+                                                                                        }
+                                                                                    } else {
+                                                                                        for(let i = 0, size = _$[$0].first_line - _$[$0-1].last_line; i < size; i++ ){
+                                                                                            $$[$0-1] = $$[$0-1] + '\n';
+                                                                                        }
+                                                                                    }
+                                                                                    $$[$0-1] = $$[$0-1] + $$[$0];
+                                                                                    this.$ = $$[$0-1];
+                                                                                    reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB</td> <td>LISTA_CONT_ATRB VALUES_CONT_ATRB</td> </tr>');
+                                                                               
+break;
+case 26:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB</td> <td>VALUES_CONT_ATRB</td> </tr>');
+                                                                               
+break;
+case 27:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>VALUE</td> </tr>');
+                                                                               
+break;
+case 28:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>lt</td> </tr>');
+                                                                               
+break;
+case 29:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>apost</td> </tr>');
+                                                                               
+break;
+case 30:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_ATRB_SMPL</td> <td>LISTA_CONT_ATRB_SMPL</td> </tr>');
+                                                                               
+break;
+case 31:
+
+                                                                                    this.$ = '';
+                                                                                    reporteGramatical.push('<tr> <td>CONTENIDO_ATRB_SMPL</td> <td>Epsilon</td> </tr>');
+                                                                               
+break;
+case 32:
+
+                                                                                    if(_$[$0-1].last_line == _$[$0].first_line){ 
+                                                                                        if(_$[$0-1].last_column < _$[$0].first_column ){
+                                                                                            for(let i = 0, size = _$[$0].first_column - _$[$0-1].last_column; i < size; i++ ){
+                                                                                                $$[$0-1] = $$[$0-1] + ' ';
+                                                                                            }
+                                                                                        }
+                                                                                    } else {
+                                                                                        for(let i = 0, size = _$[$0].first_line - _$[$0-1].last_line; i < size; i++ ){
+                                                                                            $$[$0-1] = $$[$0-1] + '\n';
+                                                                                        }
+                                                                                    }
+                                                                                    $$[$0-1] = $$[$0-1] + $$[$0];
+                                                                                    this.$ = $$[$0-1];
+                                                                                    reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB_SMPL</td> <td>LISTA_CONT_ATRB_SMPL VALUES_CONT_ATRB_SMPL</td> </tr>');
+                                                                               
+break;
+case 33:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB_SMPL</td> <td>VALUES_CONT_ATRB_SMPL</td> </tr>');
+                                                                               
+break;
+case 34:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>VALUE</td> </tr>');
+                                                                               
+break;
+case 35:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>lt</td> </tr>');
+                                                                               
+break;
+case 36:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>qmrk</td> </tr>');
+                                                                               
+break;
+case 37:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>identifier</td> </tr>');
+                                                                               
+break;
+case 38:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>contentH</td> </tr>');
+                                                                               
+break;
+case 39:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>div</td> </tr>');
+                                                                               
+break;
+case 40:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>gt</td> </tr>');
+                                                                               
+break;
+case 41:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>asig</td> </tr>');
+                                                                               
+break;
+case 42:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>double</td> </tr>');
+                                                                               
+break;
+case 43:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>integer</td> </tr>');
+                                                                               
+break;
+case 44:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>qst</td> </tr>');
+                                                                               
+break;
+case 45:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>xml</td> </tr>');
+                                                                               
+break;
+case 46:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>minus</td> </tr>');
+                                                                               
+break;
+case 47:
+
+                                                                                    this.$ = $$[$0];
+                                                                                    reporteGramatical.push('<tr> <td>VALUE</td> <td>Escape</td> </tr>');
+                                                                               
 break;
 }
 },
@@ -1129,6 +1374,11 @@ parse: function parse(input) {
 
     var erroresSemanticos = [];
     var erroresLexicos = [];
+    var reporteGramatical = [];
+
+    function getClr(){
+        return "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -3012,22 +3262,33 @@ const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
     constructor() {
         this.lexicos = [];
+        this.lista_objetos = [];
+        this.lista_objetos_xpath = [];
+        this.nodos = [];
+        this.edges = [];
+        this.nodoxpath = [];
+        this.edgesxpath = [];
+        this.i = 1;
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
+        window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
-        this.xmlAsc_obj = objetos;
-        console.log(objetos);
+        this.lista_objetos = objetos.objeto;
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
-        //this.Errsemantico = objetos.erroresSemanticos;
-        //console.log(this.Errsemantico);
-        //console.log(objetos);
+        if (objetos !== undefined) {
+            let reporteGramatical = '';
+            for (let i = objetos.reporteGramatical.length - 1; i >= 0; i--) {
+                reporteGramatical += objetos.reporteGramatical[i];
+            }
+            window.localStorage.setItem('reporteGramatical', reporteGramatical);
+        }
     }
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
-        this.xpathAsc_obj = objetos;
-        console.log(objetos);
+        this.lista_objetos_xpath = objetos.Nodo;
+        console.log(this.lista_objetos_xpath);
     }
     readFile(e) {
         console.log('read file ...');
@@ -3073,6 +3334,149 @@ class Main {
         }
         //setup our table array
     }
+    graficar() {
+        this.nodos = [];
+        this.edges = [];
+        let aux = {
+            id: 1,
+            label: 's',
+        };
+        this.nodos.push(aux);
+        this.lista_objetos.forEach((element) => {
+            // console.log(element.identificador);
+            this.i++;
+            let padre = this.i;
+            let aux = {
+                id: padre,
+                label: element.identificador,
+            };
+            this.nodos.push(aux);
+            let aux2 = {
+                from: 1,
+                to: this.i,
+            };
+            this.edges.push(aux2);
+            this.getObjetos(element.listaObjetos, padre);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, padre);
+            }
+        });
+        window.localStorage.setItem('nodos', JSON.stringify(this.nodos));
+        window.localStorage.setItem('edges', JSON.stringify(this.edges));
+        //console.log(this.nodos);
+        //console.log(this.edges);
+    }
+    getAtributos(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            this.i++;
+            let hijo = this.i;
+            let aux = {
+                id: hijo,
+                label: element.identificador,
+            };
+            let aux2 = {
+                from: padre,
+                to: hijo,
+            };
+            this.nodos.push(aux);
+            this.edges.push(aux2);
+            if (element.textWithoutSpecial != '') {
+                this.i++;
+                aux = {
+                    id: this.i,
+                    label: element.textWithoutSpecial,
+                };
+                aux2 = {
+                    from: hijo,
+                    to: this.i,
+                };
+                this.nodos.push(aux);
+                this.edges.push(aux2);
+            }
+        });
+    }
+    getObjetos(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            this.i++;
+            let hijo = this.i;
+            let aux = {
+                id: this.i,
+                label: element.identificador,
+            };
+            let aux2 = {
+                from: padre,
+                to: this.i,
+            };
+            this.nodos.push(aux);
+            this.edges.push(aux2);
+            if (element.textWithoutSpecial != '') {
+                this.i++;
+                aux = {
+                    id: this.i,
+                    label: element.textWithoutSpecial,
+                };
+                aux2 = {
+                    from: hijo,
+                    to: this.i,
+                };
+                this.nodos.push(aux);
+                this.edges.push(aux2);
+            }
+            this.getObjetos(element.listaObjetos, this.i);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, hijo);
+            }
+        });
+    }
+    arbolXpath() {
+        this.i = 1;
+        this.nodoxpath = [];
+        this.edgesxpath = [];
+        let aux = {
+            id: 1,
+            label: 's',
+        };
+        this.nodoxpath.push(aux);
+        let element = this.lista_objetos_xpath;
+        console.log(element);
+        console.log(element.val);
+        this.i++;
+        let padre = this.i;
+        aux = {
+            id: padre,
+            label: element.val,
+        };
+        this.nodoxpath.push(aux);
+        let aux2 = {
+            from: 1,
+            to: this.i,
+        };
+        this.edgesxpath.push(aux2);
+        this.getObjetosXpath(element.children, padre);
+        window.localStorage.setItem('nodosxpath', JSON.stringify(this.nodoxpath));
+        window.localStorage.setItem('edgesxpath', JSON.stringify(this.edgesxpath));
+        console.log(this.nodoxpath);
+        console.log(this.edgesxpath);
+    }
+    getObjetosXpath(listaObjeto, padre) {
+        listaObjeto.forEach((element) => {
+            if (element != undefined) {
+                this.i++;
+                let hijo = this.i;
+                let aux = {
+                    id: this.i,
+                    label: element.val,
+                };
+                let aux2 = {
+                    from: padre,
+                    to: this.i,
+                };
+                this.nodoxpath.push(aux);
+                this.edgesxpath.push(aux2);
+                this.getObjetosXpath(element.children, this.i);
+            }
+        });
+    }
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {
@@ -3089,6 +3493,7 @@ class Main {
                     ? codeBlock.value
                     : '';
                 this.ejecutarCodigoXmlAsc(content);
+                this.graficar();
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
@@ -3099,6 +3504,7 @@ class Main {
                 let input = document.getElementById('codeXPath');
                 let content = input !== undefined && input !== null ? input.value : '';
                 this.ejecutarCodigoXpathAsc(content);
+                this.arbolXpath();
             });
         }
         let clean = document.getElementById('clean');
@@ -3118,9 +3524,6 @@ class Main {
                 this.getErroresLexicos();
             });
         }
-    }
-    filterForXpath() {
-        console.log(this.xpathAsc_obj.XPath);
     }
 }
 exports.Main = Main;
