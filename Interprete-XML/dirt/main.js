@@ -12,6 +12,7 @@ class Main {
         this.edges = [];
         this.nodoxpath = [];
         this.edgesxpath = [];
+        this.tablaSimbolos = "";
         this.i = 1;
     }
     ejecutarCodigoXmlAsc(entrada) {
@@ -19,6 +20,7 @@ class Main {
         window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
         this.lista_objetos = objetos.objeto;
+        console.log(this.lista_objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         if (objetos !== undefined) {
             let reporteGramatical = "";
@@ -77,6 +79,55 @@ class Main {
             });
         }
         //setup our table array
+    }
+    TablaSimbolos() {
+        window.localStorage.setItem('TablaSimbolosXML', '');
+        this.lista_objetos.forEach((element) => {
+            // console.log(element.identificador);
+            let aux = '<tr><td>' +
+                element.identificador +
+                '</td><td>Objeto</td><td>Global</td>' +
+                '<td>' + element.linea + '</td><td>' +
+                element.columna + '</td></tr>';
+            this.tablaSimbolos = this.tablaSimbolos + aux;
+            this.getObjetosTablaxml(element.listaObjetos, element.identificador);
+            if (element.listaAtributos) {
+                this.getAtributos(element.listaAtributos, element.identificador);
+            }
+        });
+        window.localStorage.setItem('TablaSimbolosXML', this.tablaSimbolos);
+    }
+    getObjetosTablaxml(listaObjeto, ambito) {
+        listaObjeto.forEach((element) => {
+            let aux = '<tr><td>' +
+                element.identificador +
+                '</td><td>Objeto</td><td>' + ambito + '</td>' +
+                '<td>' + element.linea + '</td><td>' +
+                element.columna + '</td></tr>';
+            this.tablaSimbolos = this.tablaSimbolos + aux;
+            this.getObjetosTablaxml(element.listaObjetos, element.identificador);
+            if (element.listaAtributos) {
+                this.getAtributosTablaxml(element.listaAtributos, element.identificador);
+            }
+        });
+    }
+    getAtributosTablaxml(listaObjeto, ambito) {
+        listaObjeto.forEach((element) => {
+            let aux = '<tr><td>' +
+                element.identificador +
+                '</td><td>Atributo</td><td>' + ambito + '</td>' +
+                '<td>' + element.linea + '</td><td>' +
+                element.columna + '</td></tr>';
+            this.tablaSimbolos = this.tablaSimbolos + aux;
+            if (element.textWithoutSpecial != "") {
+                aux = '<tr><td>' +
+                    element.textWithoutSpecial +
+                    '</td><td>Atributo</td><td>' + element.identificador + '</td>' +
+                    '<td>' + element.linea + '</td><td>' +
+                    element.columna + '</td></tr>';
+                this.tablaSimbolos = this.tablaSimbolos + aux;
+            }
+        });
     }
     graficar() {
         this.nodos = [];
@@ -265,6 +316,13 @@ class Main {
             console.log("btn Tabla Errores Activo");
             tablaErrores.addEventListener('click', () => {
                 this.getErroresLexicos();
+            });
+        }
+        let tablaSimbolosxml = document.getElementById('tablaxml');
+        if (tablaSimbolosxml !== undefined && tablaSimbolosxml !== null) {
+            console.log("btn Tabla Simbolos Activo");
+            tablaSimbolosxml.addEventListener('click', () => {
+                this.TablaSimbolos();
             });
         }
     }
