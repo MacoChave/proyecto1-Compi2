@@ -77,6 +77,7 @@ stringliteral                       \"{stringdouble}*\"
         var xPathAscLexerErrors = []
         var xPathAscAST_nodes
         var xPathAscAST_path
+        var xPathAscAST_pathAux
 %}
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
@@ -124,24 +125,24 @@ PATHS :
                                         children: [
                                             xPathAscAST_path,
                                             {name: '|', val: '|', children: []},
-                                            xPathAscAST_nodes
+                                            xPathAscAST_pathAux
                                         ]
                                     }
                                     xPathAscAST_path = nodo
                                 }
         | PATH                  { 
                                     $$ = [$1]
-                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST_nodes]}
+                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST_pathAux]}
                                     xPathAscAST_path = nodo
                                 }
         ;
 
 PATH : 
         NODES                   { 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST_path]}
+                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST_nodes]}
                                     $$ = $1 
                                     $$ = {...$$, Nodo: nodo}
-                                    xPathAscAST_path = nodo
+                                    xPathAscAST_pathAux = nodo
                                 }
         ;
 
