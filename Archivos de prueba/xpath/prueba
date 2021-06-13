@@ -34,3 +34,4 @@ bookstore//book
 //book/title | //book/price
 //title | //price
 /bookstore/book/title | //price
+//book/title | //book/price | /@title

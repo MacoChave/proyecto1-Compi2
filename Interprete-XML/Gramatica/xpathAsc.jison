@@ -75,7 +75,8 @@ stringliteral                       \"{stringdouble}*\"
 
         var xPathAscSyntaxErrors = []
         var xPathAscLexerErrors = []
-        var xPathAscAST
+        var xPathAscAST_nodes
+        var xPathAscAST_path
 %}
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
@@ -102,7 +103,7 @@ START :
                                     var nodo = {
                                         name: 'START',
                                         val: 'START',
-                                        children: [xPathAscAST]
+                                        children: [xPathAscAST_path]
                                     }
                                     $$ = {...$$, Nodo: nodo}
 
@@ -121,25 +122,26 @@ PATHS :
                                         name: 'PATHS', 
                                         val: 'PATHS', 
                                         children: [
-                                            xPathAscAST,
+                                            xPathAscAST_path,
                                             {name: '|', val: '|', children: []},
-                                            $3.Nodo
+                                            xPathAscAST_nodes
                                         ]
                                     }
-                                    xPathAscAST = nodo
+                                    xPathAscAST_path = nodo
                                 }
         | PATH                  { 
-                                    $$ = [$1] 
-                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST]}
-                                    xPathAscAST = nodo
+                                    $$ = [$1]
+                                    var nodo = {name: 'PATHS', val: 'PATHS', children: [xPathAscAST_nodes]}
+                                    xPathAscAST_path = nodo
                                 }
         ;
 
 PATH : 
         NODES                   { 
+                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST_path]}
                                     $$ = $1 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST]}
-                                    xPathAscAST = nodo
+                                    $$ = {...$$, Nodo: nodo}
+                                    xPathAscAST_path = nodo
                                 }
         ;
 
@@ -154,12 +156,12 @@ NODES :
                                         name: 'NODES',
                                         val: 'NODES',
                                         children: [
-                                            xPathAscAST,
+                                            xPathAscAST_nodes,
                                             {name: 'div', val: '/', children: []},
                                             $3.Nodo
                                         ]
                                     }
-                                    xPathAscAST = nodo
+                                    xPathAscAST_nodes = nodo
                                 }
         | SLASH EL              {
                                     if ($1 == 2) {
@@ -178,7 +180,7 @@ NODES :
                                             $2.Nodo
                                         ]
                                     }
-                                    xPathAscAST = nodo
+                                    xPathAscAST_nodes = nodo
                                 }
         ;
 
