@@ -30,6 +30,8 @@ export enum TypeElement {
 	ATRIBUTO,
 	NODO,
 	ALL,
+	CURRENT,
+	PARENT,
 }
 
 export class Operation implements Instruccion {

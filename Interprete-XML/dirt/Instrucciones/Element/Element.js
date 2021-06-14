@@ -30,6 +30,8 @@ var TypeElement;
     TypeElement[TypeElement["ATRIBUTO"] = 0] = "ATRIBUTO";
     TypeElement[TypeElement["NODO"] = 1] = "NODO";
     TypeElement[TypeElement["ALL"] = 2] = "ALL";
+    TypeElement[TypeElement["CURRENT"] = 3] = "CURRENT";
+    TypeElement[TypeElement["PARENT"] = 4] = "PARENT";
 })(TypeElement = exports.TypeElement || (exports.TypeElement = {}));
 class Operation {
     constructor(line, column, type) {

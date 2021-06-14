@@ -49,9 +49,9 @@ class Main {
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
-        // console.log(objetos);
+        console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        this.execPath_list(objetos.XPath);
+        // this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -388,6 +388,7 @@ class Main {
         });
     }
     execPath_list(pathList) {
+        /** //root/message | //root/price | /@abc */
         pathList.forEach((path) => {
             console.log('<---------->');
             console.log(`${path.length} NODOS`);
@@ -399,22 +400,12 @@ class Main {
         let xmlObj = this.lista_objetos[0];
         console.log('***********');
         nodeList.forEach((node) => {
-            console.log({
-                NODENAME: node.name,
-                TYPE: node.type,
-                RECURSIVE: node.recursive,
-                ROOT: node.fromRoot,
-            });
-            xmlObj = this.searchElement(xmlObj, node.name);
-            if (xmlObj === null)
-                return;
+            xmlObj = this.searchElement(xmlObj, node.name, node.type);
             console.log(xmlObj);
         });
         console.log('***********');
     }
-    searchElement(xmlObj, nodename) {
-        return xmlObj.identificador === nodename ? xmlObj : null;
-    }
+    searchElement(xmlObj, nodename, type) { }
     execExp_list() { }
     execAttr_list() { }
     setListener() {
