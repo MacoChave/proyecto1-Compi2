@@ -1,6 +1,7 @@
 import { AST } from './AST/AST';
 import { Entorno } from './AST/Entorno';
 import { Instruccion } from './Interfaces/Instruccion';
+import { Etiqueta } from './Expresiones/Objeto';
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
@@ -25,6 +26,13 @@ export class Main {
 		const objetos = xmlAsc.parse(entrada);
 		this.lista_objetos = objetos.objeto;
 		console.log(this.lista_objetos);
+
+		if (this.lista_objetos.length > 1) {
+			console.log(this.getXmlFormat(this.lista_objetos[1]));
+		} else {
+			console.log(this.getXmlFormat(this.lista_objetos[0]));
+		}
+
 		window.localStorage.setItem(
 			'lexicos',
 			JSON.stringify(objetos.erroresLexicos)
@@ -44,6 +52,40 @@ export class Main {
 		const objetos = xpathAsc.parse(entrada);
 		this.lista_objetos_xpath = objetos.Nodo;
 		console.log(this.lista_objetos_xpath);
+	}
+
+	getXmlFormat(objeto: any) {
+		let contenido = "";
+		let atributos = "";
+		let etiqueta = "";
+
+		//TODO: agregar etiquetas
+		etiqueta += '\n<' + objeto.identificador;
+		if (atributos !== "") {
+			etiqueta += " " + etiqueta + " ";
+		}
+		if (objeto.etiqueta === Etiqueta.DOBLE) {
+			etiqueta += '>';
+			if (objeto.listaObjetos.length > 0) {
+				for (let i = 0, size = objeto.listaObjetos.length; i < size; i++) {
+					let children = this.getXmlFormat(objeto.listaObjetos[i]);
+					contenido += children;
+				}
+			} else {
+				contenido += objeto.textWithoutSpecial;
+			}
+
+			if (objeto.listaObjetos.length > 0) {
+				etiqueta += '\t\t' + contenido;
+				etiqueta += '\n';
+			} else {
+				etiqueta += contenido;
+			}
+			etiqueta += '</' + objeto.identificador + ">";
+		} else if (objeto.etiqueta === Etiqueta.UNICA) {
+			etiqueta += '/>';
+		}
+		return etiqueta;
 	}
 
 	readFile(e: any) {
