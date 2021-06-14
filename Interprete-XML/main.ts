@@ -3,6 +3,7 @@ import { Entorno } from './AST/Entorno';
 import { Instruccion } from './Interfaces/Instruccion';
 import { Etiqueta } from './Expresiones/Objeto';
 import { Comilla } from './Expresiones/Atributo';
+import { TypeElement } from './Instrucciones/Element/Element';
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
@@ -54,10 +55,10 @@ export class Main {
 	ejecutarCodigoXpathAsc(entrada: any) {
 		console.log('ejecutando xpathAsc ...');
 		const objetos = xpathAsc.parse(entrada);
-		// console.log(objetos);
+		console.log(objetos);
 		this.lista_objetos_xpath = objetos.Nodo;
 
-		this.execPath_list(objetos.XPath);
+		// this.execPath_list(objetos.XPath);
 	}
 
 	getXmlFormat(objeto: any) {
@@ -429,6 +430,7 @@ export class Main {
 	}
 
 	execPath_list(pathList: any) {
+		/** //root/message | //root/price | /@abc */
 		pathList.forEach((path: any) => {
 			console.log('<---------->');
 			console.log(`${path.length} NODOS`);
@@ -441,22 +443,13 @@ export class Main {
 		let xmlObj = this.lista_objetos[0];
 		console.log('***********');
 		nodeList.forEach((node: any) => {
-			console.log({
-				NODENAME: node.name,
-				TYPE: node.type,
-				RECURSIVE: node.recursive,
-				ROOT: node.fromRoot,
-			});
-			xmlObj = this.searchElement(xmlObj, node.name);
-			if (xmlObj === null) return;
+			xmlObj = this.searchElement(xmlObj, node.name, node.type);
 			console.log(xmlObj);
 		});
 		console.log('***********');
 	}
 
-	searchElement(xmlObj: any, nodename: string): any {
-		return xmlObj.identificador === nodename ? xmlObj : null;
-	}
+	searchElement(xmlObj: any, nodename: string, type: TypeElement): any {}
 
 	execExp_list() {}
 

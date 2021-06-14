@@ -148,9 +148,7 @@ PATH :
 
 NODES :
         NODES SLASH EL            {
-                                    if ($1.count > 0) {
-                                        $2.recursive = true
-                                    }
+                                    $3.slashes = $2.count
                                     $1.push($3)
                                     $$ = $1
                                     var nodo = {
@@ -165,13 +163,7 @@ NODES :
                                     xPathAscAST_nodes = nodo
                                 }
         | SLASH EL              {
-                                    if ($1.count == 2) {
-                                        $2.recursive = true
-                                        $2.fromRoot = true
-                                    }
-                                    if ($1.count == 1) {
-                                        $2.fromRoot = true
-                                    }
+                                    $2.slashes = $1.count
                                     $$ = [$2]
                                     var nodo = {
                                         name: 'NODES',
@@ -240,6 +232,24 @@ EL :
                                     }
                                     $$ = {...$$, Nodo: nodo}
                                 }
+|       '..'                    { 
+                                    $$ = new Element('', TypeElement.PARENT, [], 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: '..', val: '..', children: []}]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | '.'                   { 
+                                    $$ = new Element('', TypeElement.CURRENT, [], 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: '.', val: '.', children: []}]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
         | ATTR                  { 
                                     $$ = $1 
                                     var nodo = {
@@ -277,7 +287,7 @@ ATTR :
 
 ATTR_P :
         id                      { 
-                                    $$ = new Element($1, TypeElement.NODO, [], 1, @1.first_column)
+                                    $$ = new Element($1, TypeElement.ATRIBUTO, [], 1, @1.first_column)
                                     var nodo = {
                                         name: 'ATTR_P',
                                         val: 'ATTR_P',

@@ -72,12 +72,12 @@
   }
 */
 var xpathAsc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,12,14,16],$V1=[2,9],$V2=[1,6],$V3=[5,6],$V4=[2,4],$V5=[1,14],$V6=[1,11],$V7=[1,12],$V8=[1,15],$V9=[2,5,6,11,12,14,16],$Va=[1,29],$Vb=[1,25],$Vc=[1,26],$Vd=[1,27],$Ve=[1,28],$Vf=[1,30],$Vg=[1,31],$Vh=[1,32],$Vi=[1,33],$Vj=[2,5,6,11,12,14,16,20,21,22,23,24,25,26,27,28,29,30,31,32,34],$Vk=[1,38],$Vl=[1,36],$Vm=[1,37],$Vn=[1,39],$Vo=[1,40],$Vp=[1,41],$Vq=[1,42],$Vr=[1,43],$Vs=[1,44],$Vt=[1,45],$Vu=[1,46],$Vv=[1,47],$Vw=[1,48],$Vx=[14,20,21,22,23,24,25,26,27,28,29,30,31,32,34],$Vy=[20,21,22,24,25,26,27,28,29,30,31,34],$Vz=[20,24,25,26,27,28,29,30,31,34];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,12,14,15,16,18],$V1=[2,9],$V2=[1,6],$V3=[5,6],$V4=[2,4],$V5=[1,16],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[1,14],$Va=[1,17],$Vb=[2,5,6,11,12,14,15,16,18],$Vc=[1,31],$Vd=[1,27],$Ve=[1,28],$Vf=[1,29],$Vg=[1,30],$Vh=[1,32],$Vi=[1,33],$Vj=[1,34],$Vk=[1,35],$Vl=[2,5,6,11,12,14,15,16,18,22,23,24,25,26,27,28,29,30,31,32,33,34,36],$Vm=[1,40],$Vn=[1,38],$Vo=[1,39],$Vp=[1,41],$Vq=[1,42],$Vr=[1,43],$Vs=[1,44],$Vt=[1,45],$Vu=[1,46],$Vv=[1,47],$Vw=[1,48],$Vx=[1,49],$Vy=[1,50],$Vz=[14,22,23,24,25,26,27,28,29,30,31,32,33,34,36],$VA=[22,23,24,26,27,28,29,30,31,32,33,36],$VB=[22,26,27,28,29,30,31,32,33,36];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"PATHS":4,"EOF":5,"|":6,"PATH":7,"NODES":8,"SLASH":9,"EL":10,"div":11,"id":12,"PRE":13,"*":14,"ATTR":15,"@":16,"ATTR_P":17,"[":18,"E":19,"]":20,"+":21,"-":22,"opDiv":23,"=":24,"!=":25,"<":26,">":27,"<=":28,">=":29,"opOr":30,"opAnd":31,"opMod":32,"(":33,")":34,"double":35,"integer":36,"StringLiteral":37,"resLast":38,"resPosition":39,"resText":40,"resNode":41,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"|",11:"div",12:"id",14:"*",16:"@",18:"[",20:"]",21:"+",22:"-",23:"opDiv",24:"=",25:"!=",26:"<",27:">",28:"<=",29:">=",30:"opOr",31:"opAnd",32:"opMod",33:"(",34:")",35:"double",36:"integer",37:"StringLiteral",38:"resLast",39:"resPosition",40:"resText",41:"resNode"},
-productions_: [0,[3,2],[4,3],[4,1],[7,1],[8,3],[8,2],[9,2],[9,1],[9,0],[10,2],[10,1],[10,1],[10,1],[15,2],[17,1],[17,1],[13,3],[13,0],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,3],[19,1],[19,1],[19,1],[19,1],[19,3],[19,3],[19,3],[19,3],[19,1]],
+symbols_: {"error":2,"START":3,"PATHS":4,"EOF":5,"|":6,"PATH":7,"NODES":8,"SLASH":9,"EL":10,"div":11,"id":12,"PRE":13,"*":14,"..":15,".":16,"ATTR":17,"@":18,"ATTR_P":19,"[":20,"E":21,"]":22,"+":23,"-":24,"opDiv":25,"=":26,"!=":27,"<":28,">":29,"<=":30,">=":31,"opOr":32,"opAnd":33,"opMod":34,"(":35,")":36,"double":37,"integer":38,"StringLiteral":39,"resLast":40,"resPosition":41,"resText":42,"resNode":43,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"|",11:"div",12:"id",14:"*",15:"..",16:".",18:"@",20:"[",22:"]",23:"+",24:"-",25:"opDiv",26:"=",27:"!=",28:"<",29:">",30:"<=",31:">=",32:"opOr",33:"opAnd",34:"opMod",35:"(",36:")",37:"double",38:"integer",39:"StringLiteral",40:"resLast",41:"resPosition",42:"resText",43:"resNode"},
+productions_: [0,[3,2],[4,3],[4,1],[7,1],[8,3],[8,2],[9,2],[9,1],[9,0],[10,2],[10,1],[10,1],[10,1],[10,1],[10,1],[17,2],[19,1],[19,1],[13,3],[13,0],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,3],[21,1],[21,1],[21,1],[21,1],[21,3],[21,3],[21,3],[21,3],[21,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -137,9 +137,7 @@ case 4:
 break;
 case 5:
 
-                                    if ($$[$0-2].count > 0) {
-                                        $$[$0-1].recursive = true
-                                    }
+                                    $$[$0].slashes = $$[$0-1].count
                                     $$[$0-2].push($$[$0])
                                     this.$ = $$[$0-2]
                                     var nodo = {
@@ -156,13 +154,7 @@ case 5:
 break;
 case 6:
 
-                                    if ($$[$0-1].count == 2) {
-                                        $$[$0].recursive = true
-                                        $$[$0].fromRoot = true
-                                    }
-                                    if ($$[$0-1].count == 1) {
-                                        $$[$0].fromRoot = true
-                                    }
+                                    $$[$0].slashes = $$[$0-1].count
                                     this.$ = [$$[$0]]
                                     var nodo = {
                                         name: 'NODES',
@@ -238,6 +230,28 @@ case 11:
 break;
 case 12:
  
+                                    this.$ = new Element('', TypeElement.PARENT, [], 1, _$[$0].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: '..', val: '..', children: []}]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 13:
+ 
+                                    this.$ = new Element('', TypeElement.CURRENT, [], 1, _$[$0].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: '.', val: '.', children: []}]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 14:
+ 
                                     this.$ = $$[$0] 
                                     var nodo = {
                                         name: 'EL',
@@ -247,7 +261,7 @@ case 12:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 13:
+case 15:
  
                                     var xPathSyntaxAscError = new Error(
                                         yytext,
@@ -258,7 +272,7 @@ case 13:
                                     xPathAscSyntaxErrors.push(xPathSyntaxAscError) 
                                 
 break;
-case 14:
+case 16:
  
                                     this.$ = $$[$0] 
                                     var nodo = {
@@ -272,9 +286,9 @@ case 14:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 15:
+case 17:
  
-                                    this.$ = new Element($$[$0], TypeElement.NODO, [], 1, _$[$0].first_column)
+                                    this.$ = new Element($$[$0], TypeElement.ATRIBUTO, [], 1, _$[$0].first_column)
                                     var nodo = {
                                         name: 'ATTR_P',
                                         val: 'ATTR_P',
@@ -283,7 +297,7 @@ case 15:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 16:
+case 18:
  
                                     this.$ = new Element($$[$0], TypeElement.ALL, [], 1, _$[$0].first_column)
                                     var nodo = {
@@ -294,7 +308,7 @@ case 16:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 17:
+case 19:
  
                                     this.$ = $$[$0-1] 
                                     var nodo = {
@@ -309,7 +323,7 @@ case 17:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 18:
+case 20:
  
                                     this.$ = []
                                     var nodo = {
@@ -320,7 +334,7 @@ case 18:
                                     this.$ = {...this.$, Nodo: nodo} 
                                 
 break;
-case 19:
+case 21:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.SUMA)
@@ -338,7 +352,7 @@ case 19:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 20:
+case 22:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.RESTA)
@@ -356,7 +370,7 @@ case 20:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 21:
+case 23:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MULTIPLICACION)
@@ -374,7 +388,7 @@ case 21:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 22:
+case 24:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.DIVISION)
@@ -392,7 +406,7 @@ case 22:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 23:
+case 25:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.IGUAL)
@@ -410,7 +424,7 @@ case 23:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 24:
+case 26:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.DIFERENTE)
@@ -428,7 +442,7 @@ case 24:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 25:
+case 27:
  
                                     console.log({E1: $$[$0-2], op: $$[$0-1], E2: $$[$0]})
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MENOR)
@@ -446,7 +460,7 @@ case 25:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 26:
+case 28:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MAYOR)
@@ -464,7 +478,7 @@ case 26:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 27:
+case 29:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MENOR_IGUAL)
@@ -482,7 +496,7 @@ case 27:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 28:
+case 30:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MAYOR_IGUAL)
@@ -500,7 +514,7 @@ case 28:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 29:
+case 31:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.OR)
@@ -518,7 +532,7 @@ case 29:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 30:
+case 32:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.AND)
@@ -536,7 +550,7 @@ case 30:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 31:
+case 33:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MOD)
@@ -554,7 +568,7 @@ case 31:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 32:
+case 34:
  
                                     this.$ = $$[$0-1] 
                                     var nodo = {
@@ -569,7 +583,7 @@ case 32:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 33:
+case 35:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.DOUBLE)
                                     op.savePrimitiveOp($$[$0])
@@ -582,7 +596,7 @@ case 33:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 34:
+case 36:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.INTEGER)
                                     op.savePrimitiveOp($$[$0])
@@ -595,7 +609,7 @@ case 34:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 35:
+case 37:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.STRING)
                                     op.savePrimitiveOp($$[$0])
@@ -608,7 +622,7 @@ case 35:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 36:
+case 38:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.ID)
                                     op.savePrimitiveOp($$[$0])
@@ -621,7 +635,7 @@ case 36:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 37:
+case 39:
  
                                     this.$ = new Operation('LAST'.first_line, _$[$0-2].first_column, TypeOperation.LAST) 
                                     var nodo = {
@@ -632,7 +646,7 @@ case 37:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 38:
+case 40:
  
                                     this.$ = new Operation('POSITION'.first_line, _$[$0-2].first_column, TypeOperation.POSITION) 
                                     var nodo = {
@@ -643,7 +657,7 @@ case 38:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 39:
+case 41:
  
                                     this.$ = new Operation('TEXT'.first_line, _$[$0-2].first_column, TypeOperation.TEXT) 
                                     var nodo = {
@@ -654,7 +668,7 @@ case 39:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 40:
+case 42:
  
                                     this.$ = new Operation('NODE'.first_line, _$[$0-2].first_column, TypeOperation.NODE) 
                                     var nodo = {
@@ -665,7 +679,7 @@ case 40:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 41:
+case 43:
  
                                     this.$ = new Operation($$[$0].name, $$[$0].linea, $$[$0].columna, TypeOperation.ATRIBUTO) 
                                     var nodo = {
@@ -678,7 +692,7 @@ case 41:
 break;
 }
 },
-table: [o($V0,$V1,{3:1,4:2,7:3,8:4,9:5,11:$V2}),{1:[3]},{5:[1,7],6:[1,8]},o($V3,[2,3]),o($V0,$V1,{9:9,5:$V4,6:$V4,11:$V2}),{2:$V5,10:10,12:$V6,14:$V7,15:13,16:$V8},o($V0,[2,8],{11:[1,16]}),{1:[2,1]},o($V0,$V1,{8:4,9:5,7:17,11:$V2}),{2:$V5,10:18,12:$V6,14:$V7,15:13,16:$V8},o($V9,[2,6]),o($V9,[2,18],{13:19,18:[1,20]}),o($V9,[2,11]),o($V9,[2,12]),o($V9,[2,13]),{12:[1,22],14:[1,23],17:21},o($V0,[2,7]),o($V3,[2,2]),o($V9,[2,5]),o($V9,[2,10]),{12:$Va,15:34,16:$V8,19:24,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},o($Vj,[2,14]),o($Vj,[2,15]),o($Vj,[2,16]),{14:$Vk,20:[1,35],21:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw},{12:$Va,15:34,16:$V8,19:49,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},o($Vx,[2,33]),o($Vx,[2,34]),o($Vx,[2,35]),o($Vx,[2,36]),{33:[1,50]},{33:[1,51]},{33:[1,52]},{33:[1,53]},o($Vx,[2,41]),o($V9,[2,17]),{12:$Va,15:34,16:$V8,19:54,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:55,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:56,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:57,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:58,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:59,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:60,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:61,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:62,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:63,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:64,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:65,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{12:$Va,15:34,16:$V8,19:66,33:$Vb,35:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi},{14:$Vk,21:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw,34:[1,67]},{34:[1,68]},{34:[1,69]},{34:[1,70]},{34:[1,71]},o($Vy,[2,19],{14:$Vk,23:$Vn,32:$Vw}),o($Vy,[2,20],{14:$Vk,23:$Vn,32:$Vw}),o($Vx,[2,21]),o($Vx,[2,22]),o($Vz,[2,23],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o($Vz,[2,24],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o($Vz,[2,25],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o($Vz,[2,26],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o($Vz,[2,27],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o($Vz,[2,28],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,32:$Vw}),o([20,30,34],[2,29],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,31:$Vv,32:$Vw}),o([20,30,31,34],[2,30],{14:$Vk,21:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,32:$Vw}),o($Vx,[2,31]),o($Vx,[2,32]),o($Vx,[2,37]),o($Vx,[2,38]),o($Vx,[2,39]),o($Vx,[2,40])],
+table: [o($V0,$V1,{3:1,4:2,7:3,8:4,9:5,11:$V2}),{1:[3]},{5:[1,7],6:[1,8]},o($V3,[2,3]),o($V0,$V1,{9:9,5:$V4,6:$V4,11:$V2}),{2:$V5,10:10,12:$V6,14:$V7,15:$V8,16:$V9,17:15,18:$Va},o($V0,[2,8],{11:[1,18]}),{1:[2,1]},o($V0,$V1,{8:4,9:5,7:19,11:$V2}),{2:$V5,10:20,12:$V6,14:$V7,15:$V8,16:$V9,17:15,18:$Va},o($Vb,[2,6]),o($Vb,[2,20],{13:21,20:[1,22]}),o($Vb,[2,11]),o($Vb,[2,12]),o($Vb,[2,13]),o($Vb,[2,14]),o($Vb,[2,15]),{12:[1,24],14:[1,25],19:23},o($V0,[2,7]),o($V3,[2,2]),o($Vb,[2,5]),o($Vb,[2,10]),{12:$Vc,17:36,18:$Va,21:26,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},o($Vl,[2,16]),o($Vl,[2,17]),o($Vl,[2,18]),{14:$Vm,22:[1,37],23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw,33:$Vx,34:$Vy},{12:$Vc,17:36,18:$Va,21:51,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},o($Vz,[2,35]),o($Vz,[2,36]),o($Vz,[2,37]),o($Vz,[2,38]),{35:[1,52]},{35:[1,53]},{35:[1,54]},{35:[1,55]},o($Vz,[2,43]),o($Vb,[2,19]),{12:$Vc,17:36,18:$Va,21:56,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:57,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:58,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:59,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:60,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:61,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:62,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:63,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:64,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:65,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:66,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:67,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{12:$Vc,17:36,18:$Va,21:68,35:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj,43:$Vk},{14:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw,33:$Vx,34:$Vy,36:[1,69]},{36:[1,70]},{36:[1,71]},{36:[1,72]},{36:[1,73]},o($VA,[2,21],{14:$Vm,25:$Vp,34:$Vy}),o($VA,[2,22],{14:$Vm,25:$Vp,34:$Vy}),o($Vz,[2,23]),o($Vz,[2,24]),o($VB,[2,25],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o($VB,[2,26],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o($VB,[2,27],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o($VB,[2,28],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o($VB,[2,29],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o($VB,[2,30],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,34:$Vy}),o([22,32,36],[2,31],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,33:$Vx,34:$Vy}),o([22,32,33,36],[2,32],{14:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,34:$Vy}),o($Vz,[2,33]),o($Vz,[2,34]),o($Vz,[2,39]),o($Vz,[2,40]),o($Vz,[2,41]),o($Vz,[2,42])],
 defaultActions: {7:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -1266,15 +1280,15 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 38
+case 1:return 40
 break;
 case 2:return 'resAttr'
 break;
-case 3:return 41
+case 3:return 43
 break;
-case 4:return 40
+case 4:return 42
 break;
-case 5:return 39
+case 5:return 41
 break;
 case 6:return 'resChild'
 break;
@@ -1286,57 +1300,57 @@ case 9:return 'resAncestor'
 break;
 case 10:return 'resAncestorSelf'
 break;
-case 11:return 23
+case 11:return 25
 break;
-case 12:return 32
+case 12:return 34
 break;
 case 13:return 'oPor'
 break;
-case 14:return 31
+case 14:return 33
 break;
-case 15:return 21
+case 15:return 23
 break;
-case 16:return 22
+case 16:return 24
 break;
 case 17:return 14
 break;
-case 18:return 24
+case 18:return 26
 break;
-case 19:return 25
+case 19:return 27
 break;
-case 20:return 26
+case 20:return 28
 break;
-case 21:return 27
+case 21:return 29
 break;
-case 22:return 28
+case 22:return 30
 break;
-case 23:return 29
+case 23:return 31
 break;
 case 24:return 11
 break;
 case 25:return 6
 break;
-case 26:return '.'
+case 26:return 16
 break;
-case 27:return 16
+case 27:return 18
 break;
-case 28:return 18
+case 28:return 20
 break;
-case 29:return 20
+case 29:return 22
 break;
-case 30:return 33
+case 30:return 35
 break;
-case 31:return 34
+case 31:return 36
 break;
-case 32:return 35;
+case 32:return 37;
 break;
-case 33:return 36;
+case 33:return 38;
 break;
 case 34:return 'string';
 break;
 case 35:return 12;
 break;
-case 36:return 37
+case 36:return 39
 break;
 case 37:return 5
 break;
