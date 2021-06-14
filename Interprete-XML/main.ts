@@ -26,7 +26,7 @@ export class Main {
 
 		const objetos = xmlAsc.parse(entrada);
 		this.lista_objetos = objetos.objeto;
-		console.log(this.lista_objetos);
+		console.log(objetos);
 
 		if (this.lista_objetos.length > 1) {
 			console.log(this.getXmlFormat(this.lista_objetos[1]));
