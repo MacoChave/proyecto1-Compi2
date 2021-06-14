@@ -2,6 +2,7 @@ import { AST } from './AST/AST';
 import { Entorno } from './AST/Entorno';
 import { Instruccion } from './Interfaces/Instruccion';
 import { Etiqueta } from './Expresiones/Objeto';
+import { Comilla } from './Expresiones/Atributo';
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
@@ -59,10 +60,20 @@ export class Main {
 		let atributos = "";
 		let etiqueta = "";
 
-		//TODO: agregar etiquetas
+		for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
+			if (Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
+				atributos += objeto.listaAtributos[i].identificador + "='" + objeto.listaAtributos[i].textWithoutSpecial + "'";
+			} else {
+				atributos += objeto.listaAtributos[i].identificador + '="' + objeto.listaAtributos[i].textWithoutSpecial + '"';
+			}
+			if (i !== size - 1) {
+				atributos += " ";
+			}
+		}
+
 		etiqueta += '\n<' + objeto.identificador;
 		if (atributos !== "") {
-			etiqueta += " " + etiqueta + " ";
+			etiqueta += " " + atributos + " ";
 		}
 		if (objeto.etiqueta === Etiqueta.DOBLE) {
 			etiqueta += '>';
@@ -100,7 +111,7 @@ export class Main {
 				var contents = target.result;
 				var element = document.getElementById('codeBlock');
 				if (element !== undefined && element !== null) {
-					element.textContent = contents;
+					element.value = contents;
 				} else {
 					console.log('Error set content');
 				}
