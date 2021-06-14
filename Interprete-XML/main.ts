@@ -1,6 +1,8 @@
 import { AST } from './AST/AST';
 import { Entorno } from './AST/Entorno';
 import { Instruccion } from './Interfaces/Instruccion';
+import { Etiqueta } from './Expresiones/Objeto';
+import { Comilla } from './Expresiones/Atributo';
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
@@ -27,7 +29,14 @@ export class Main {
 		console.log(objetos);
 		console.log('**********');
 		this.lista_objetos = objetos.objeto;
-		// console.log(this.lista_objetos);
+		console.log(this.lista_objetos);
+
+		if (this.lista_objetos.length > 1) {
+			console.log(this.getXmlFormat(this.lista_objetos[1]));
+		} else {
+			console.log(this.getXmlFormat(this.lista_objetos[0]));
+		}
+
 		window.localStorage.setItem(
 			'lexicos',
 			JSON.stringify(objetos.erroresLexicos)
@@ -51,6 +60,62 @@ export class Main {
 		this.execPath_list(objetos.XPath);
 	}
 
+	getXmlFormat(objeto: any) {
+		let contenido = '';
+		let atributos = '';
+		let etiqueta = '';
+
+		for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
+			if (Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
+				atributos +=
+					objeto.listaAtributos[i].identificador +
+					"='" +
+					objeto.listaAtributos[i].textWithoutSpecial +
+					"'";
+			} else {
+				atributos +=
+					objeto.listaAtributos[i].identificador +
+					'="' +
+					objeto.listaAtributos[i].textWithoutSpecial +
+					'"';
+			}
+			if (i !== size - 1) {
+				atributos += ' ';
+			}
+		}
+
+		etiqueta += '\n<' + objeto.identificador;
+		if (atributos !== '') {
+			etiqueta += ' ' + atributos + ' ';
+		}
+		if (objeto.etiqueta === Etiqueta.DOBLE) {
+			etiqueta += '>';
+			if (objeto.listaObjetos.length > 0) {
+				for (
+					let i = 0, size = objeto.listaObjetos.length;
+					i < size;
+					i++
+				) {
+					let children = this.getXmlFormat(objeto.listaObjetos[i]);
+					contenido += children;
+				}
+			} else {
+				contenido += objeto.textWithoutSpecial;
+			}
+
+			if (objeto.listaObjetos.length > 0) {
+				etiqueta += '\t\t' + contenido;
+				etiqueta += '\n';
+			} else {
+				etiqueta += contenido;
+			}
+			etiqueta += '</' + objeto.identificador + '>';
+		} else if (objeto.etiqueta === Etiqueta.UNICA) {
+			etiqueta += '/>';
+		}
+		return etiqueta;
+	}
+
 	readFile(e: any) {
 		console.log('read file ...');
 		var file = e.target.files[0];
@@ -63,7 +128,7 @@ export class Main {
 				var contents = target.result;
 				var element = document.getElementById('codeBlock');
 				if (element !== undefined && element !== null) {
-					element.textContent = contents;
+					element.value = contents;
 				} else {
 					console.log('Error set content');
 				}

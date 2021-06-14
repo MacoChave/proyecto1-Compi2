@@ -3260,6 +3260,8 @@ exports.Element = Element;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
+const Objeto_1 = require("./Expresiones/Objeto");
+const Atributo_1 = require("./Expresiones/Atributo");
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
@@ -3282,7 +3284,6 @@ class Main {
         console.log(objetos);
         console.log('**********');
         this.lista_objetos = objetos.objeto;
-        // console.log(this.lista_objetos);
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         if (objetos !== undefined) {
             let reporteGramatical = '';
@@ -3299,6 +3300,50 @@ class Main {
         this.lista_objetos_xpath = objetos.Nodo;
         this.execPath_list(objetos.XPath);
     }
+    getXmlFormat(objeto) {
+        let contenido = "";
+        let atributos = "";
+        let etiqueta = "";
+        for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
+            if (Atributo_1.Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
+                atributos += objeto.listaAtributos[i].identificador + "='" + objeto.listaAtributos[i].textWithoutSpecial + "'";
+            }
+            else {
+                atributos += objeto.listaAtributos[i].identificador + '="' + objeto.listaAtributos[i].textWithoutSpecial + '"';
+            }
+            if (i !== size - 1) {
+                atributos += " ";
+            }
+        }
+        etiqueta += '\n<' + objeto.identificador;
+        if (atributos !== "") {
+            etiqueta += " " + atributos + " ";
+        }
+        if (objeto.etiqueta === Objeto_1.Etiqueta.DOBLE) {
+            etiqueta += '>';
+            if (objeto.listaObjetos.length > 0) {
+                for (let i = 0, size = objeto.listaObjetos.length; i < size; i++) {
+                    let children = this.getXmlFormat(objeto.listaObjetos[i]);
+                    contenido += children;
+                }
+            }
+            else {
+                contenido += objeto.textWithoutSpecial;
+            }
+            if (objeto.listaObjetos.length > 0) {
+                etiqueta += '\t\t' + contenido;
+                etiqueta += '\n';
+            }
+            else {
+                etiqueta += contenido;
+            }
+            etiqueta += '</' + objeto.identificador + ">";
+        }
+        else if (objeto.etiqueta === Objeto_1.Etiqueta.UNICA) {
+            etiqueta += '/>';
+        }
+        return etiqueta;
+    }
     readFile(e) {
         console.log('read file ...');
         var file = e.target.files[0];
@@ -3312,7 +3357,7 @@ class Main {
                 var contents = target.result;
                 var element = document.getElementById('codeBlock');
                 if (element !== undefined && element !== null) {
-                    element.textContent = contents;
+                    element.value = contents;
                 }
                 else {
                     console.log('Error set content');
@@ -3642,5 +3687,5 @@ class Main {
 }
 exports.Main = Main;
 
-},{"./Gramatica/gramatica_XML_ASC":7,"./Gramatica/xpathAsc":8}]},{},[10])(10)
+},{"./Expresiones/Atributo":5,"./Expresiones/Objeto":6,"./Gramatica/gramatica_XML_ASC":7,"./Gramatica/xpathAsc":8}]},{},[10])(10)
 });
