@@ -25,6 +25,13 @@ class Main {
         console.log(objetos);
         console.log('**********');
         this.lista_objetos = objetos.objeto;
+        console.log(objetos);
+        if (this.lista_objetos.length > 1) {
+            console.log(this.getXmlFormat(this.lista_objetos[1]));
+        }
+        else {
+            console.log(this.getXmlFormat(this.lista_objetos[0]));
+        }
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         if (objetos !== undefined) {
             let reporteGramatical = '';
@@ -42,23 +49,31 @@ class Main {
         this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
-        let contenido = "";
-        let atributos = "";
-        let etiqueta = "";
+        let contenido = '';
+        let atributos = '';
+        let etiqueta = '';
         for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
             if (Atributo_1.Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
-                atributos += objeto.listaAtributos[i].identificador + "='" + objeto.listaAtributos[i].textWithoutSpecial + "'";
+                atributos +=
+                    objeto.listaAtributos[i].identificador +
+                        "='" +
+                        objeto.listaAtributos[i].textWithoutSpecial +
+                        "'";
             }
             else {
-                atributos += objeto.listaAtributos[i].identificador + '="' + objeto.listaAtributos[i].textWithoutSpecial + '"';
+                atributos +=
+                    objeto.listaAtributos[i].identificador +
+                        '="' +
+                        objeto.listaAtributos[i].textWithoutSpecial +
+                        '"';
             }
             if (i !== size - 1) {
-                atributos += " ";
+                atributos += ' ';
             }
         }
         etiqueta += '\n<' + objeto.identificador;
-        if (atributos !== "") {
-            etiqueta += " " + atributos + " ";
+        if (atributos !== '') {
+            etiqueta += ' ' + atributos + ' ';
         }
         if (objeto.etiqueta === Objeto_1.Etiqueta.DOBLE) {
             etiqueta += '>';
@@ -78,7 +93,7 @@ class Main {
             else {
                 etiqueta += contenido;
             }
-            etiqueta += '</' + objeto.identificador + ">";
+            etiqueta += '</' + objeto.identificador + '>';
         }
         else if (objeto.etiqueta === Objeto_1.Etiqueta.UNICA) {
             etiqueta += '/>';
