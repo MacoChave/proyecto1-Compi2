@@ -23,8 +23,11 @@ export class Main {
 		window.localStorage.setItem('reporteGramatical', '');
 
 		const objetos = xmlAsc.parse(entrada);
+		console.log('**********');
+		console.log(objetos);
+		console.log('**********');
 		this.lista_objetos = objetos.objeto;
-		console.log(this.lista_objetos);
+		// console.log(this.lista_objetos);
 		window.localStorage.setItem(
 			'lexicos',
 			JSON.stringify(objetos.erroresLexicos)
@@ -42,8 +45,10 @@ export class Main {
 	ejecutarCodigoXpathAsc(entrada: any) {
 		console.log('ejecutando xpathAsc ...');
 		const objetos = xpathAsc.parse(entrada);
+		// console.log(objetos);
 		this.lista_objetos_xpath = objetos.Nodo;
-		console.log(this.lista_objetos_xpath);
+
+		this.execPath_list(objetos.XPath);
 	}
 
 	readFile(e: any) {
@@ -357,6 +362,40 @@ export class Main {
 			}
 		});
 	}
+
+	execPath_list(pathList: any) {
+		pathList.forEach((path: any) => {
+			console.log('<---------->');
+			console.log(`${path.length} NODOS`);
+			this.execNodes_list(path);
+			console.log('<---------->');
+		});
+	}
+
+	execNodes_list(nodeList: any) {
+		let xmlObj = this.lista_objetos[0];
+		console.log('***********');
+		nodeList.forEach((node: any) => {
+			console.log({
+				NODENAME: node.name,
+				TYPE: node.type,
+				RECURSIVE: node.recursive,
+				ROOT: node.fromRoot,
+			});
+			xmlObj = this.searchElement(xmlObj, node.name);
+			if (xmlObj === null) return;
+			console.log(xmlObj);
+		});
+		console.log('***********');
+	}
+
+	searchElement(xmlObj: any, nodename: string): any {
+		return xmlObj.identificador === nodename ? xmlObj : null;
+	}
+
+	execExp_list() {}
+
+	execAttr_list() {}
 
 	setListener() {
 		let inputFile = document.getElementById('open-file');

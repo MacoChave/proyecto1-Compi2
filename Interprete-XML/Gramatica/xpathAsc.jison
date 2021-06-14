@@ -139,17 +139,17 @@ PATHS :
 
 PATH : 
         NODES                   { 
-                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST_nodes]}
                                     $$ = $1 
-                                    $$ = {...$$, Nodo: nodo}
+                                    var nodo = {name: 'PATH', val: 'PATH', children: [xPathAscAST_nodes]}
+                                    // $$ = {...$$, Nodo: nodo}
                                     xPathAscAST_pathAux = nodo
                                 }
         ;
 
 NODES :
-        NODES div EL            { 
-                                    if ($2 == 2) {
-                                        $3.recursive = true
+        NODES SLASH EL            {
+                                    if ($1.count > 0) {
+                                        $2.recursive = true
                                     }
                                     $1.push($3)
                                     $$ = $1
@@ -158,18 +158,18 @@ NODES :
                                         val: 'NODES',
                                         children: [
                                             xPathAscAST_nodes,
-                                            {name: 'div', val: '/', children: []},
+                                            $2.Nodo,
                                             $3.Nodo
                                         ]
                                     }
                                     xPathAscAST_nodes = nodo
                                 }
         | SLASH EL              {
-                                    if ($1 == 2) {
+                                    if ($1.count == 2) {
                                         $2.recursive = true
                                         $2.fromRoot = true
                                     }
-                                    else if ($1 == 1) {
+                                    if ($1.count == 1) {
                                         $2.fromRoot = true
                                     }
                                     $$ = [$2]
@@ -187,7 +187,7 @@ NODES :
 
 SLASH:
         div div                 { 
-                                    $$ = 2 
+                                    $$ = { count: 2 }
                                     var nodo = {
                                         name: 'SLASH',
                                         val: 'SLASH',
@@ -199,7 +199,7 @@ SLASH:
                                     $$ = {...$$, Nodo: nodo}
                                 }
         | div                   { 
-                                    $$ = 1 
+                                    $$ = { count: 1 }
                                     var nodo = {
                                         name: 'SLASH',
                                         val: 'SLASH',
@@ -208,7 +208,7 @@ SLASH:
                                     $$ = {...$$, Nodo: nodo}
                                 }
         |                       { 
-                                    $$ = 0 
+                                    $$ = { count: 0 }
                                     var nodo = {
                                         name: 'SLASH',
                                         val: 'SLASH',
