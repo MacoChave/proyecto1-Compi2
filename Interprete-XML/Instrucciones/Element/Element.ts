@@ -97,8 +97,7 @@ export class Element implements Instruccion {
 	columna: number;
 	name: string;
 	type: TypeElement;
-	recursive: boolean;
-	fromRoot: boolean;
+	slashes: number;
 	filters: Filter[];
 
 	constructor(
@@ -112,8 +111,7 @@ export class Element implements Instruccion {
 		this.columna = column;
 		this.name = name;
 		this.type = type;
-		this.recursive = false;
-		this.fromRoot = false;
+		this.slashes = 0;
 		this.filters = filters;
 	}
 

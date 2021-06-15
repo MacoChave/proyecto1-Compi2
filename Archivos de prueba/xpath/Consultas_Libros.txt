@@ -1,0 +1,79 @@
+1) Consulta 1 Archivo Libros.xml
+    /catalog/book[@id="bk101"]/./*/text()
+
+    Salida Esperada
+
+        GÃ¡mbardellÃ¤, MÃ¡tthew
+        XML Developer's Guide
+        Computer
+        44.95
+        2000-10-01
+        An in-depth look at creating applications 
+            with XML.
+
+2) Consulta 2 Archivo Libros.xml
+
+        //catalog/book/descendant::price
+
+        Salida Esperada
+            <price>44.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>4.95</price>
+            <price>4.95</price>
+            <price>4.95</price>
+            <price>6.95</price>
+            <price>36.95</price>
+            <price>36.95</price>
+            <price>49.95</price>
+
+
+3) Consulta 3 Archivo Libros.xml
+
+        //book[publish_date/@cali="hola"]/title/.
+
+        Salida Esperada
+            <title>Visual Studio 7: A Comprehensive Guide</title>
+
+4)  Consulta 4 Archivo Libros.xml
+
+        /catalog/book[price>(2*2+8+10)]/price[position()<2]/node()
+            
+        Salida Esperada    
+            44.95
+            36.95
+            36.95
+            49.95
+
+5) Consulta 5 Archivo Libros.xml
+        //@*
+        
+        Salida Esperada 
+            bk101
+            bk102
+            bk103
+            bk104
+            bk105
+            cali
+            bk106
+            cali
+            bk107
+            bk108
+            bk109
+            bk110
+            cali
+            bk111
+            bk112
+            hola
+
+
+6) Consulta 6 Archivo Libros.xml
+    //@top/../@*
+
+    Salida Esperada 
+
+        cali
+        cali
+        cali

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 const Objeto_1 = require("./Expresiones/Objeto");
 const Atributo_1 = require("./Expresiones/Atributo");
+const Element_1 = require("./Instrucciones/Element/Element");
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
@@ -21,11 +22,10 @@ class Main {
         console.log('ejecutando xmlAsc ...');
         window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
-        console.log('**********');
+        // console.log('**********');
         console.log(objetos);
-        console.log('**********');
+        // console.log('**********');
         this.lista_objetos = objetos.objeto;
-        console.log(objetos);
         if (this.lista_objetos.length > 1) {
             console.log(this.getXmlFormat(this.lista_objetos[1]));
         }
@@ -43,10 +43,11 @@ class Main {
     }
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
+        console.value = '';
         const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        // this.execPath_list(objetos.XPath);
+        this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -358,24 +359,131 @@ class Main {
     execPath_list(pathList) {
         /** //root/message | //root/price | /@abc */
         pathList.forEach((path) => {
-            console.log('<---------->');
-            console.log(`${path.length} NODOS`);
+            console.log(`PATH LIST: ${path.length}`);
             this.execNodes_list(path);
-            console.log('<---------->');
         });
     }
     execNodes_list(nodeList) {
-        let xmlObj = this.lista_objetos[0];
-        console.log('***********');
+        let rootXML = {
+            elements: this.lista_objetos.length > 1
+                ? this.lista_objetos[1]
+                : this.lista_objetos[0],
+            parent: undefined,
+        };
         nodeList.forEach((node) => {
-            xmlObj = this.searchElement(xmlObj, node.name, node.type);
-            console.log(xmlObj);
+            if (typeof node === 'string')
+                return;
         });
-        console.log('***********');
+        switch (this.checkRoot(rootXML, nodeList)) {
+            case 1: {
+                /* ENCONTRADO */
+                let index = 1;
+                if (nodeList.length === index) {
+                    /* MOSTRAR XML EN CONSOLA */
+                    console.info(rootXML);
+                }
+                else {
+                    if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
+                        rootXML = {
+                            elements: rootXML.elements.listaAtributos,
+                            parent: rootXML.elements,
+                        };
+                        console.log('A buscar atributos!!');
+                        this.searchElement(rootXML, nodeList, index);
+                    }
+                    else if (nodeList[index].type === Element_1.TypeElement.NODO) {
+                        rootXML = {
+                            elements: rootXML.elements.listaObjetos,
+                            parent: rootXML.elements,
+                        };
+                        console.log('A buscar elementos!!');
+                        this.searchElement(rootXML, nodeList, index);
+                    }
+                }
+                break;
+            }
+            case 2: {
+                /* PROFUNDIDAD */
+                let index = 0;
+                rootXML = {
+                    elements: this.lista_objetos.listaObjetos,
+                    parent: undefined,
+                };
+                console.log('A seguir buscando');
+                this.searchElement(rootXML, nodeList, index);
+                break;
+            }
+            case 3: {
+                /* ENCONTRADO */
+                let index = 2;
+                if (nodeList.length === index) {
+                    /* MOSTRAR XML EN CONSOLA */
+                    console.info(rootXML);
+                }
+                else {
+                    if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
+                        rootXML = {
+                            elements: this.lista_objetos.listaAtributos,
+                            parent: rootXML.elements,
+                        };
+                        this.searchElement(rootXML, nodeList, index);
+                    }
+                    else if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
+                        rootXML = {
+                            elements: this.lista_objetos.listaObjetos,
+                            parent: rootXML.elements,
+                        };
+                        this.searchElement(rootXML, nodeList, index);
+                    }
+                }
+                break;
+            }
+            default:
+                console.warn('No coincide con nodo raiz');
+        }
     }
-    searchElement(xmlObj, nodename, type) { }
-    execExp_list() { }
-    execAttr_list() { }
+    checkRoot(rootXML, nodeList) {
+        let root = rootXML.elements;
+        if (nodeList[0].type === Element_1.TypeElement.NODO) {
+            if (nodeList[0].slashes === 0 || nodeList[0].slashes === 1) {
+                // NODOS++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+                if (nodeList[0].name === root.identificador)
+                    return 1;
+            }
+            else if (nodeList[0].slashes === 2) {
+                // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS HIJOS DE ROOT
+                if (nodeList[0].name === root.identificador)
+                    return 1;
+                // NODO++ & BUSCAR EN ELEMENTOS HIJOS DE ROOT
+                return 2;
+            }
+        }
+        else if (nodeList[0].type === Element_1.TypeElement.CURRENT) {
+            // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+            if (nodeList[1].name === root.identificador ||
+                nodeList[1].type === Element_1.TypeElement.ALL)
+                return 3;
+        }
+        else if (nodeList[0].type === Element_1.TypeElement.ALL) {
+            // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+            return 1;
+        }
+        // ROOT NO COINCIDE
+        return 0;
+    }
+    searchElement(rootXML, nodeList, index) {
+        if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
+            rootXML.elements.forEach((element) => {
+                if (element.identificador === nodeList[index].name) {
+                    // IMPRIMIR ETIQUETA PADRE
+                    console.info(rootXML);
+                }
+            });
+            return;
+        }
+        else {
+        }
+    }
     setListener() {
         let inputFile = document.getElementById('open-file');
         if (inputFile !== undefined && inputFile !== null) {

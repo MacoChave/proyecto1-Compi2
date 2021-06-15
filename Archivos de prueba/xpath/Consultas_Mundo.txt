@@ -1,0 +1,31 @@
+Consulta 1
+
+    //mundo/continente/pais[@moneda="Quetzal"]/nombre
+
+    Salida
+
+        <nombre>Guatemala</nombre>
+
+Consulta 2
+
+    //mundo/continente/pais/poblacion[@unit="units"]/../nombre
+
+    Salida
+
+        <nombre>Estados unidos</nombre>
+
+Consulta 3
+
+        /mundo/continente/pais/poblacion[@unit="units"]/../../@name | /mundo/continente/pais/poblacion[@unit="thousands"]/../idioma/text()
+
+    Salida
+        
+        Frances
+        America
+
+Consulta 4
+        /mundo/continente/pais[idioma="Español"]/poblacion/./..//idioma/text()
+        Español
+        Español
+        Español
+        Español

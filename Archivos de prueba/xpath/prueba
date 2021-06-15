@@ -35,4 +35,6 @@ bookstore//book
 //title | //price
 /bookstore/book/title | //price
 //book/title | //book/price | /@title
-./book/title | //book/price | ../@title
+
+//root/message | ./root/message | /@msg
+root/message | /root/message/../child | ./root/message | ../root/message | ..//root/message | ../@msg

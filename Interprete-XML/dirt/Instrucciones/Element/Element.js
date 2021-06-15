@@ -75,8 +75,7 @@ class Element {
         this.columna = column;
         this.name = name;
         this.type = type;
-        this.recursive = false;
-        this.fromRoot = false;
+        this.slashes = 0;
         this.filters = filters;
     }
     ejecutar(ent, arbol) {

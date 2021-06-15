@@ -86,6 +86,7 @@ stringliteral                       \"{stringdouble}*\"
 %left '=' '!=' '<' '>' '<=' '>='
 %left '+' '-'
 %left '*' 'opDiv' 'opMod'
+%right '.' div
 
 // DEFINIMOS PRODUCCIÓN INICIAL
 %start START
@@ -147,7 +148,7 @@ PATH :
         ;
 
 NODES :
-        NODES SLASH EL            {
+        NODES SLASH EL       {
                                     $3.slashes = $2.count
                                     $1.push($3)
                                     $$ = $1
@@ -156,21 +157,19 @@ NODES :
                                         val: 'NODES',
                                         children: [
                                             xPathAscAST_nodes,
-                                            $2.Nodo,
                                             $3.Nodo
                                         ]
                                     }
                                     xPathAscAST_nodes = nodo
                                 }
-        | SLASH EL              {
+        | SLASH EL           {
                                     $2.slashes = $1.count
                                     $$ = [$2]
                                     var nodo = {
                                         name: 'NODES',
                                         val: 'NODES',
                                         children: [
-                                            $1.Nodo,
-                                            $2.Nodo
+                                            $1.Nodo
                                         ]
                                     }
                                     xPathAscAST_nodes = nodo
@@ -232,7 +231,7 @@ EL :
                                     }
                                     $$ = {...$$, Nodo: nodo}
                                 }
-|       '..'                    { 
+        | '.''.'                    { 
                                     $$ = new Element('', TypeElement.PARENT, [], 1, @1.first_column) 
                                     var nodo = {
                                         name: 'EL',

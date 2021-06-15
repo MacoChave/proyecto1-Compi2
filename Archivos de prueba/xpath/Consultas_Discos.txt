@@ -1,0 +1,48 @@
+1) Consulta 1, archivo Discos.xml
+    /CATALOG/CD[5]/TITLE || /CATALOG/CD[6]/TITLE  || /CATALOG/CD[7]/TITLE
+
+    Salida Esperada
+        Eros & Eros"Esto tiene que salir bien"'Esto tiene que salir muy bien tambien'
+
+2) Consulta 2, archivo Discos.xml
+    /CATALOG/CD/PRICE/../../CD[last()-5+2-2*1 div 2]
+
+
+    Salida Esperada
+
+            <CD>
+                <TITLE>Pavarotti Gala Concert</TITLE>
+                <ARTIST>Luciano Pavarotti</ARTIST>
+                <COUNTRY>UK</COUNTRY>
+                <COMPANY>DECCA</COMPANY>
+                <PRICE>9.90</PRICE>
+                <YEAR>1991</YEAR>
+            </CD>
+
+3) Consulta 3, archivo Discos.xml
+    //CD[TITLE="Romanza"]/PRICE/@calificacion
+
+    Salida Esperada
+         
+        Hola
+
+4) Consulta 4, Archivo Discos.xml
+    //child::PRICE[@calificacion="hola"]/text()
+
+    Salida Esperada
+
+        10.80
+
+5) Consulta 5, Archivo Discos.xml
+    //attribute::calificacion
+
+     Salida Esperada
+
+        10.80
+
+6)  Consulta 6, Archivo Discos.xml
+    //ancestor-or-self::CD[YEAR=1998]/TITLE/text()
+
+    Salida Esperada
+
+        "Esto tiene que salir bien"

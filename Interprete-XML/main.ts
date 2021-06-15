@@ -1,9 +1,6 @@
-import { AST } from './AST/AST';
-import { Entorno } from './AST/Entorno';
-import { Instruccion } from './Interfaces/Instruccion';
-import { Etiqueta } from './Expresiones/Objeto';
+import { Etiqueta, Objeto } from './Expresiones/Objeto';
 import { Comilla } from './Expresiones/Atributo';
-import { TypeElement } from './Instrucciones/Element/Element';
+import { Element, TypeElement } from './Instrucciones/Element/Element';
 
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
@@ -26,11 +23,10 @@ export class Main {
 		window.localStorage.setItem('reporteGramatical', '');
 
 		const objetos = xmlAsc.parse(entrada);
-		console.log('**********');
+		// console.log('**********');
 		console.log(objetos);
-		console.log('**********');
+		// console.log('**********');
 		this.lista_objetos = objetos.objeto;
-		console.log(objetos);
 
 		if (this.lista_objetos.length > 1) {
 			console.log(this.getXmlFormat(this.lista_objetos[1]));
@@ -54,11 +50,12 @@ export class Main {
 
 	ejecutarCodigoXpathAsc(entrada: any) {
 		console.log('ejecutando xpathAsc ...');
+		console.value = '';
 		const objetos = xpathAsc.parse(entrada);
 		console.log(objetos);
 		this.lista_objetos_xpath = objetos.Nodo;
 
-		// this.execPath_list(objetos.XPath);
+		this.execPath_list(objetos.XPath);
 	}
 
 	getXmlFormat(objeto: any) {
@@ -432,28 +429,129 @@ export class Main {
 	execPath_list(pathList: any) {
 		/** //root/message | //root/price | /@abc */
 		pathList.forEach((path: any) => {
-			console.log('<---------->');
-			console.log(`${path.length} NODOS`);
+			console.log(`PATH LIST: ${path.length}`);
 			this.execNodes_list(path);
-			console.log('<---------->');
 		});
 	}
 
-	execNodes_list(nodeList: any) {
-		let xmlObj = this.lista_objetos[0];
-		console.log('***********');
+	execNodes_list(nodeList: Element[]) {
+		let rootXML = {
+			elements:
+				this.lista_objetos.length > 1
+					? this.lista_objetos[1]
+					: this.lista_objetos[0],
+			parent: undefined,
+		};
+
 		nodeList.forEach((node: any) => {
-			xmlObj = this.searchElement(xmlObj, node.name, node.type);
-			console.log(xmlObj);
+			if (typeof node === 'string') return;
 		});
-		console.log('***********');
+		switch (this.checkRoot(rootXML, nodeList)) {
+			case 1: {
+				/* ENCONTRADO */
+				let index = 1;
+				if (nodeList.length === index) {
+					/* MOSTRAR XML EN CONSOLA */
+					console.info(rootXML);
+				} else {
+					if (nodeList[index].type === TypeElement.ATRIBUTO) {
+						rootXML = {
+							elements: rootXML.elements.listaAtributos,
+							parent: rootXML.elements,
+						};
+						console.log('A buscar atributos!!');
+						this.searchElement(rootXML, nodeList, index);
+					} else if (nodeList[index].type === TypeElement.NODO) {
+						rootXML = {
+							elements: rootXML.elements.listaObjetos,
+							parent: rootXML.elements,
+						};
+						console.log('A buscar elementos!!');
+						this.searchElement(rootXML, nodeList, index);
+					}
+				}
+				break;
+			}
+			case 2: {
+				/* PROFUNDIDAD */
+				let index = 0;
+				rootXML = {
+					elements: this.lista_objetos.listaObjetos,
+					parent: undefined,
+				};
+				console.log('A seguir buscando');
+				this.searchElement(rootXML, nodeList, index);
+				break;
+			}
+			case 3: {
+				/* ENCONTRADO */
+				let index = 2;
+				if (nodeList.length === index) {
+					/* MOSTRAR XML EN CONSOLA */
+					console.info(rootXML);
+				} else {
+					if (nodeList[index].type === TypeElement.ATRIBUTO) {
+						rootXML = {
+							elements: this.lista_objetos.listaAtributos,
+							parent: rootXML.elements,
+						};
+						this.searchElement(rootXML, nodeList, index);
+					} else if (nodeList[index].type === TypeElement.ATRIBUTO) {
+						rootXML = {
+							elements: this.lista_objetos.listaObjetos,
+							parent: rootXML.elements,
+						};
+						this.searchElement(rootXML, nodeList, index);
+					}
+				}
+				break;
+			}
+			default:
+				console.warn('No coincide con nodo raiz');
+		}
 	}
 
-	searchElement(xmlObj: any, nodename: string, type: TypeElement): any {}
+	checkRoot(rootXML: any, nodeList: Element[]): any {
+		let root: Objeto = rootXML.elements;
+		if (nodeList[0].type === TypeElement.NODO) {
+			if (nodeList[0].slashes === 0 || nodeList[0].slashes === 1) {
+				// NODOS++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+				if (nodeList[0].name === root.identificador) return 1;
+			} else if (nodeList[0].slashes === 2) {
+				// NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS HIJOS DE ROOT
+				if (nodeList[0].name === root.identificador) return 1;
 
-	execExp_list() {}
+				// NODO++ & BUSCAR EN ELEMENTOS HIJOS DE ROOT
+				return 2;
+			}
+		} else if (nodeList[0].type === TypeElement.CURRENT) {
+			// NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+			if (
+				nodeList[1].name === root.identificador ||
+				nodeList[1].type === TypeElement.ALL
+			)
+				return 3;
+		} else if (nodeList[0].type === TypeElement.ALL) {
+			// NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+			return 1;
+		}
 
-	execAttr_list() {}
+		// ROOT NO COINCIDE
+		return 0;
+	}
+
+	searchElement(rootXML: any, nodeList: Element[], index: number): any {
+		if (nodeList[index].type === TypeElement.ATRIBUTO) {
+			rootXML.elements.forEach((element: Objeto) => {
+				if (element.identificador === nodeList[index].name) {
+					// IMPRIMIR ETIQUETA PADRE
+					console.info(rootXML);
+				}
+			});
+			return;
+		} else {
+		}
+	}
 
 	setListener() {
 		let inputFile = document.getElementById('open-file');
