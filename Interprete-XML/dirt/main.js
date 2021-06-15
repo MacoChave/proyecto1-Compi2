@@ -11,12 +11,16 @@ class Main {
         this.lexicos = [];
         this.lista_objetos = [];
         this.lista_objetos_xpath = [];
+        this.listacst = [];
         this.nodos = [];
         this.edges = [];
+        this.nodoscst = [];
+        this.edgescst = [];
         this.nodoxpath = [];
         this.edgesxpath = [];
         this.tablaSimbolos = '';
         this.i = 1;
+        this.j = 1;
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
@@ -26,6 +30,8 @@ class Main {
         console.log(objetos);
         // console.log('**********');
         this.lista_objetos = objetos.objeto;
+        this.listacst = objetos.nodos;
+        console.log(this.listacst);
         if (this.lista_objetos.length > 1) {
             console.log(this.getXmlFormat(this.lista_objetos[1]));
         }
@@ -160,7 +166,7 @@ class Main {
             this.tablaSimbolos = this.tablaSimbolos + aux;
             this.getObjetosTablaxml(element.listaObjetos, element.identificador);
             if (element.listaAtributos) {
-                this.getAtributos(element.listaAtributos, element.identificador);
+                this.getAtributosTablaxml(element.listaAtributos, element.identificador);
             }
         });
         window.localStorage.setItem('TablaSimbolosXML', this.tablaSimbolos);
@@ -337,6 +343,33 @@ class Main {
         console.log(this.nodoxpath);
         console.log(this.edgesxpath);
     }
+    graficarcst(nodos, padre) {
+        console.log('entra?');
+        this.getnodoscst(nodos, padre);
+        window.localStorage.setItem('nodoscst', JSON.stringify(this.nodoscst));
+        window.localStorage.setItem('edgescst', JSON.stringify(this.edgescst));
+    }
+    getnodoscst(nodos, papa) {
+        let aux = nodos;
+        let auxnodos = {
+            id: papa,
+            label: aux.nombre,
+        };
+        this.nodoscst.push(auxnodos);
+        let nodohijo = aux.hijos;
+        if (nodohijo && nodohijo.length > 0) {
+            nodohijo.forEach((element) => {
+                this.j++;
+                let hijo = this.j;
+                let auxedges = {
+                    from: papa,
+                    to: hijo,
+                };
+                this.edgescst.push(auxedges);
+                this.getnodoscst(element, hijo);
+            });
+        }
+    }
     getObjetosXpath(listaObjeto, padre) {
         listaObjeto.forEach((element) => {
             if (element != undefined) {
@@ -501,6 +534,8 @@ class Main {
                     : '';
                 this.ejecutarCodigoXmlAsc(content);
                 this.graficar();
+                this.j = 1;
+                this.graficarcst(this.listacst, this.j);
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
@@ -537,6 +572,11 @@ class Main {
             tablaSimbolosxml.addEventListener('click', () => {
                 this.TablaSimbolos();
             });
+        }
+        let xmlcst = document.getElementById('arbolcst');
+        if (xmlcst !== undefined && xmlcst !== null) {
+            console.log('btn arbol cst Activo');
+            xmlcst.addEventListener('click', () => { });
         }
     }
 }
