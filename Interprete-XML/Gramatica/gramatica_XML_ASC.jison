@@ -55,6 +55,7 @@ BSL                                                     "\\".
     const {Atributo, Comilla} = require("../Expresiones/Atributo");
 
     var erroresSemanticos = [];
+    var erroresSintacticos = [];
     var erroresLexicos = [];
     var reporteGramatical = [];
 
@@ -76,9 +77,11 @@ START : RAIZ EOF                                                               {
                                                                                         nodos: $1.nodo,
                                                                                         erroresSemanticos: erroresSemanticos,
                                                                                         erroresLexicos: erroresLexicos,
+                                                                                        erroresSintacticos: erroresSintacticos,
                                                                                         reporteGramatical: reporteGramatical
                                                                                         };
                                                                                     erroresLexicos = [];
+                                                                                    erroresSintacticos = [];
                                                                                     erroresSemanticos = [];
                                                                                     reporteGramatical = [];
                                                                                     return $$;
@@ -94,12 +97,44 @@ RAIZ:
                                                                                     $$ = { nodo: new Nodo('RAIZ',[$1.nodo]), objeto: [$1.objeto]};
                                                                                     reporteGramatical.push('<tr> <td>RAIZ</td> <td>OBJETO</td> </tr>');
                                                                                }
+//----------------------------recuperación de errores
+    | error OBJETO                                                             {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': No se pudo recuperar el encabezado'));
+                                                                                    $$ = { nodo: new Nodo('RAIZ',[$2.nodo]), objeto: [$2.objeto]};
+                                                                                    reporteGramatical.push('<tr> <td>RAIZ</td> <td>ERROR OBJETO</td> </tr>');
+                                                                               }
 ;
 
 HEAD:
     lt qst xml LATRIBUTOS qst gt                                               {
                                                                                     $$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$4.nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
                                                                                     reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               }
+//----------------------------recuperación de errores
+    | error qst xml LATRIBUTOS qst gt                                          {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta < del head'));
+                                                                                    $$ = { nodo: new Nodo('HEAD',[new Nodo('ERROR',[]),new Nodo('qst',[]),new Nodo('xml',[]),$4.nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>ERROR qst xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               }
+    | lt error xml LATRIBUTOS qst gt                                           {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta ? inicial del head'));
+                                                                                    $$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('xml',[]),$4.nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt ERROR xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               }
+    | lt qst error LATRIBUTOS qst gt                                           {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id xml del head'));
+                                                                                    $$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('ERROR',[]),$4.nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst ERROR LATRIBUTOS qst gt</td> </tr>');
+                                                                               }
+    | lt qst xml LATRIBUTOS error gt                                           {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta ? final del head'));
+                                                                                    $$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$4.nodo,new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS ERROR gt</td> </tr>');
+                                                                               }
+    | lt qst xml LATRIBUTOS qst error                                          {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > final del head'));
+                                                                                    $$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$4.nodo,new Nodo('qst',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($3,'',@1.first_line, @1.first_column,$4.objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS qst ERROR</td> </tr>');
                                                                                }
 ;
 
@@ -129,6 +164,153 @@ OBJETO:
                                                                                     $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.UNICA)};
                                                                                     reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS div gt</td> </tr>');
                                                                                }
+//----------------------------recuperación de errores
+//1.--------------------------
+    | error identifier LATRIBUTOS gt OBJETOS           lt div identifier gt    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta < etiqueta de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt error LATRIBUTOS gt OBJETOS           lt div identifier gt            { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($8,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS error OBJETOS           lt div identifier gt    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > etiqueta de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('ERROR',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR OBJETOS lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt OBJETOS           lt error identifier gt     { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta / cierre de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt ERROR identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt OBJETOS           lt div error gt            { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id cierre de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div ERROR gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt OBJETOS           lt div identifier error    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > cierre de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,$5.objeto,Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div identifier ERROR</td> </tr>');
+                                                                               }
+//2.--------------------------
+    | error identifier LATRIBUTOS gt                   lt div identifier gt    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta etiqueta < de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $7){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $7 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt error LATRIBUTOS gt                   lt div identifier gt            {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$3.nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($7,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS error                   lt div identifier gt    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > etiqueta inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('ERROR',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $7){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $7 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt                   lt error identifier gt     { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta / fin de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $7){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $7 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt ERROR identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt                   lt div error gt            { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id fin de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div ERROR gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt                   lt div identifier error    { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > fin de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $7){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $7 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div identifier ERROR</td> </tr>');
+                                                                               }
+
+//3.---------------------------
+    | error identifier LATRIBUTOS gt CONTENIDO_OBJ     lt div identifier gt    {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta etiqueta < de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt error LATRIBUTOS gt CONTENIDO_OBJ     lt div identifier gt            {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($8,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS error CONTENIDO_OBJ     lt div identifier gt    {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > etiqueta de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('ERROR',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt CONTENIDO_OBJ     lt error identifier gt     {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta / etiqueta fin'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt ERROR identifier gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt CONTENIDO_OBJ     lt div error gt            {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id etiqueta fin'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div ERROR gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS gt CONTENIDO_OBJ     lt div identifier error    {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > etiqueta fin'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('gt',[]),$5.nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($2,$5.objeto,@1.first_line,@1.first_column,$3.objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($2 !== $8){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ':  No coinciden las etiquetas de apertura y final. ' + $2 + ' y ' + $8 ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier ERROR</td> </tr>');
+                                                                               }
+//4.--------------------------
+    | error identifier LATRIBUTOS div gt                                       {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta etiqueta < de inicio'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS div gt</td> </tr>');
+                                                                               }
+    | lt error LATRIBUTOS div gt                                               {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$3.nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto('ERROR','',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS div gt</td> </tr>');
+                                                                               }
+    | lt identifier LATRIBUTOS div error                                       {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': Falta > de cierre de etiqueta'));
+                                                                                    $$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$3.nodo,new Nodo('div',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($2,'',@1.first_line, @1.first_column,$3.objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS div ERROR</td> </tr>');
+                                                                               }
 ;
 
 OBJETOS:
@@ -140,6 +322,11 @@ OBJETOS:
 	| OBJETO                                                                   {
                                                                                     $$ = { nodo: new Nodo('OBJETOS',[$1.nodo]), objeto: [$1.objeto]};
                                                                                     reporteGramatical.push('<tr> <td>OBJETOS</td> <td>OBJETO</td> </tr>');
+                                                                               }
+//Recuperación de errores------------------
+    | error                                                                    {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': No se pudo recuperar el objeto'));
+                                                                                    $$ = { nodo: new Nodo('ERROR',[]), objeto: undefined};
                                                                                }
 ;
 
@@ -163,13 +350,19 @@ ATRIBUTOS:
     | ATRIBUTO                                                                 {
                                                                                     $$ = { nodo: new Nodo('ATRIBUTOS',[$1.nodo]), objeto: [$1.objeto]};
                                                                                     reporteGramatical.push('<tr> <td>ATRIBUTOS</td> <td>ATRIBUTO</td> </tr>');
-                                                                               } 
+                                                                               }
 ;
 
 ATRIBUTO: 
     identifier asig FIN_ATRIBUTO                                               {
                                                                                     $$ = { nodo: new Nodo('ATRIBUTO',[new Nodo('identifier',[]),new Nodo('asig',[]),$3.nodo]), objeto: new Atributo($1, $3.objeto.valor, @1.first_line, @1.first_column, $3.objeto.comilla)};
                                                                                     reporteGramatical.push('<tr> <td>ATRIBUTO</td> <td>identifier asig FIN_ATRIBUTO</td> </tr>');
+                                                                               }
+//Recuperación de errores------------------
+    | identifier error FIN_ATRIBUTO                                            {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': El atributo falta ='));
+                                                                                    $$ = { nodo: new Nodo('ATRIBUTO',[new Nodo('identifier',[]),new Nodo('ERROR',[]),$3.nodo]), objeto: new Atributo($1, $3.objeto.valor, @1.first_line, @1.first_column, $3.objeto.comilla)};
+                                                                                    reporteGramatical.push('<tr> <td>ATRIBUTO</td> <td>identifier ERROR FIN_ATRIBUTO</td> </tr>');
                                                                                }
 ;
 
@@ -181,6 +374,23 @@ FIN_ATRIBUTO:
     | apost CONTENIDO_ATRB_SMPL apost                                          { 
                                                                                     $$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('apost',[]),$2.nodo,new Nodo('apost',[])]), objeto: new Atributo('', $2.objeto, @1.first_line, @1.first_column, Comilla.SIMPLE)};
                                                                                     reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>apost CONTENIDO_ATRB_SMPL apost</td> </tr>');
+                                                                               }
+//Recuperación de errores------------------
+    | error CONTENIDO_ATRB qmrk                                                {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': El atributo falta doble comilla inicial'));
+                                                                                    $$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('ERROR',[]),$2.nodo,new Nodo('qmrk',[])]), objeto: new Atributo('', $2.objeto, @1.first_line, @1.first_column, Comilla.DOBLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>ERROR CONTENIDO_ATRB qmrk</td> </tr>');
+                                                                               }
+    | qmrk CONTENIDO_ATRB error                                                {
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': El atributo falta doble comilla final'));
+                                                                                    $$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('qmrk',[]),$2.nodo,new Nodo('ERROR',[])]), objeto: new Atributo('', $2.objeto, @1.first_line, @1.first_column, Comilla.DOBLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>qmrk CONTENIDO_ATRB ERROR</td> </tr>');
+                                                                               }
+//-------------------------------------------
+    | apost CONTENIDO_ATRB_SMPL error                                          { 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + @1.first_line + ' y columna: ' + @1.first_column + ': El atributo falta comilla simple final'));
+                                                                                    $$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('apost',[]),$2.nodo,new Nodo('ERROR',[])]), objeto: new Atributo('', $2.objeto, @1.first_line, @1.first_column, Comilla.SIMPLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>apost CONTENIDO_ATRB_SMPL ERROR</td> </tr>');
                                                                                }
 ;
 
