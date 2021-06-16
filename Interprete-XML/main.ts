@@ -476,77 +476,86 @@ export class Main {
 		let rootXML = {
 			elements:
 				this.lista_objetos.length > 1
-					? this.lista_objetos[1]
-					: this.lista_objetos[0],
+					? [this.lista_objetos[1]]
+					: [this.lista_objetos[0]],
 			parent: undefined,
 		};
 
 		nodeList.forEach((node: any) => {
 			if (typeof node === 'string') return;
 		});
-		switch (this.checkRoot(rootXML, nodeList)) {
-			case 1: {
-				/* ENCONTRADO */
-				let index = 1;
-				if (nodeList.length === index) {
-					/* MOSTRAR XML EN CONSOLA */
-					console.info(rootXML);
-				} else {
-					if (nodeList[index].type === TypeElement.ATRIBUTO) {
-						rootXML = {
-							elements: rootXML.elements.listaAtributos,
-							parent: rootXML.elements,
-						};
-						console.log('A buscar atributos!!');
-						this.searchElement(rootXML, nodeList, index);
-					} else if (nodeList[index].type === TypeElement.NODO) {
-						rootXML = {
-							elements: rootXML.elements.listaObjetos,
-							parent: rootXML.elements,
-						};
-						console.log('A buscar elementos!!');
-						this.searchElement(rootXML, nodeList, index);
-					}
-				}
-				break;
-			}
-			case 2: {
-				/* PROFUNDIDAD */
-				let index = 0;
-				rootXML = {
-					elements: this.lista_objetos.listaObjetos,
-					parent: undefined,
-				};
-				console.log('A seguir buscando');
-				this.searchElement(rootXML, nodeList, index);
-				break;
-			}
-			case 3: {
-				/* ENCONTRADO */
-				let index = 2;
-				if (nodeList.length === index) {
-					/* MOSTRAR XML EN CONSOLA */
-					console.info(rootXML);
-				} else {
-					if (nodeList[index].type === TypeElement.ATRIBUTO) {
-						rootXML = {
-							elements: this.lista_objetos.listaAtributos,
-							parent: rootXML.elements,
-						};
-						this.searchElement(rootXML, nodeList, index);
-					} else if (nodeList[index].type === TypeElement.ATRIBUTO) {
-						rootXML = {
-							elements: this.lista_objetos.listaObjetos,
-							parent: rootXML.elements,
-						};
-						this.searchElement(rootXML, nodeList, index);
-					}
-				}
-				break;
-			}
-			default:
-				console.warn('No coincide con nodo raiz');
+
+		// console.log(rootXML);
+		if (nodeList[0].type === TypeElement.ATRIBUTO) {
+			rootXML.elements = rootXML.elements[0].listaAtributos;
+			if (nodeList[0].slashes === 2)
+				this.searchElement(rootXML, nodeList, 0);
+		} else {
+			this.searchElement(rootXML, nodeList, 0);
 		}
+		// switch (this.checkRoot(rootXML, nodeList)) {
+		// 	case 1: {
+		// 		/* ENCONTRADO */
+		// 		let index = 1;
+		// 		if (nodeList.length === index) {
+		// 			/* FIN DE RUTAS */
+		// 			console.info(rootXML);
+		// 		} else {
+		// 			if (nodeList[index].type === TypeElement.ATRIBUTO) {
+		// 				rootXML = {
+		// 					elements: rootXML.elements.listaAtributos,
+		// 					parent: rootXML.elements,
+		// 				};
+		// 				console.log('A buscar atributos!!');
+		// 				this.searchElement(rootXML, nodeList, index);
+		// 			} else if (nodeList[index].type === TypeElement.NODO) {
+		// 				rootXML = {
+		// 					elements: rootXML.elements.listaObjetos,
+		// 					parent: rootXML.elements,
+		// 				};
+		// 				console.log('A buscar elementos!!');
+		// 				this.searchElement(rootXML, nodeList, index);
+		// 			}
+		// 		}
+		// 		break;
+		// 	}
+		// 	case 2: {
+		// 		/* PROFUNDIDAD */
+		// 		let index = 0;
+		// 		rootXML = {
+		// 			elements: this.lista_objetos.listaObjetos,
+		// 			parent: undefined,
+		// 		};
+		// 		console.log('A seguir buscando');
+		// 		this.searchElement(rootXML, nodeList, index);
+		// 		break;
+		// 	}
+		// 	case 3: {
+		// 		/* ENCONTRADO */
+		// 		let index = 2;
+		// 		if (nodeList.length === index) {
+		// 			/* FIN DE RUTAS */
+		// 			console.info(rootXML);
+		// 		} else {
+		// 			if (nodeList[index].type === TypeElement.ATRIBUTO) {
+		// 				rootXML = {
+		// 					elements: this.lista_objetos.listaAtributos,
+		// 					parent: rootXML.elements,
+		// 				};
+		// 				this.searchElement(rootXML, nodeList, index);
+		// 			} else if (nodeList[index].type === TypeElement.ATRIBUTO) {
+		// 				rootXML = {
+		// 					elements: this.lista_objetos.listaObjetos,
+		// 					parent: rootXML.elements,
+		// 				};
+		// 				this.searchElement(rootXML, nodeList, index);
+		// 			}
+		// 		}
+		// 		break;
+		// 	}
+		// 	default:
+		// 		console.warn('No coincide con nodo raiz');
+		// }
 	}
 
 	checkRoot(rootXML: any, nodeList: Element[]): any {
@@ -572,6 +581,9 @@ export class Main {
 		} else if (nodeList[0].type === TypeElement.ALL) {
 			// NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
 			return 1;
+		} else if (nodeList[0].type === TypeElement.ATRIBUTO) {
+			// NODO++ & BUSCAR EN ATRIBUTOS DE ROOT
+			if (nodeList[0].slashes === 2) return 2;
 		}
 
 		// ROOT NO COINCIDE
@@ -579,16 +591,64 @@ export class Main {
 	}
 
 	searchElement(rootXML: any, nodeList: Element[], index: number): any {
-		if (nodeList[index].type === TypeElement.ATRIBUTO) {
-			rootXML.elements.forEach((element: Objeto) => {
-				if (element.identificador === nodeList[index].name) {
-					// IMPRIMIR ETIQUETA PADRE
-					console.info(rootXML);
+		// console.log(rootXML);
+		let resXML = rootXML;
+		let flag: boolean = false;
+		if (nodeList.length === index) this.printElements(rootXML.elements);
+		// FLAG = 1: NEXT IS NODE | 0: NEXT IS ATTR
+		if (nodeList.length > index + 1)
+			flag = nodeList[index + 1].type === TypeElement.NODO ? true : false;
+
+		rootXML.elements.forEach((element: Objeto) => {
+			if (nodeList[index].type === TypeElement.ALL) {
+				if (nodeList.length > index + 1) {
+					resXML.elements = flag
+						? element.listaObjetos
+						: element.listaAtributos;
+					resXML.parent = rootXML.parent;
+					this.searchElement(resXML, nodeList, index + 1);
+				} else this.printElement(element);
+			} else if (nodeList[index].type === TypeElement.ATRIBUTO) {
+				if (
+					nodeList[index].name === element.identificador &&
+					nodeList.length - 1 === index
+				)
+					this.printElement(element);
+			} else if (nodeList[index].type === TypeElement.NODO) {
+				if (nodeList[index].name === element.identificador) {
+					if (nodeList.length > index + 1) {
+						resXML.elements = flag
+							? element.listaObjetos
+							: element.listaAtributos;
+						resXML.parent = element;
+						this.searchElement(resXML, nodeList, index + 1);
+					} else this.printElement(element);
+				} else if (nodeList[index].slashes == 2) {
+					if (nodeList.length > index + 1) {
+						resXML.elements = flag
+							? element.listaObjetos
+							: element.listaAtributos;
+						resXML.parent = element;
+						this.searchElement(resXML, nodeList, index);
+					} else this.printElement(element);
 				}
-			});
-			return;
-		} else {
-		}
+			} else if (nodeList[index].type === TypeElement.CURRENT) {
+				if (nodeList.length > index + 1)
+					this.searchElement(rootXML, nodeList, index + 1);
+				else this.printElement(element);
+			} else if (nodeList[index].type === TypeElement.PARENT) {
+			}
+		});
+	}
+
+	printElement(element: Objeto) {
+		console.info(element);
+	}
+
+	printElements(elements: Objeto[]) {
+		elements.forEach((element) => {
+			console.info(element);
+		});
 	}
 
 	setListener() {
