@@ -58,7 +58,6 @@ stringliteral                       \"{stringdouble}*\"
 
 (([0-9]+"."[0-9]*)|("."[0-9]+))                         return 'double';
 [0-9]+                                                  return 'integer';
-\"[^\"]*\"                                              return 'string';
 ([a-zA-Z])[a-zA-Z0-9_]*                                 return 'id';
 {stringliteral}                                         return 'StringLiteral'
 
