@@ -32,6 +32,7 @@ export enum TypeElement {
 	ALL,
 	CURRENT,
 	PARENT,
+	ALL_ATRIBTO,
 }
 
 export class Operation implements Instruccion {
@@ -98,12 +99,12 @@ export class Element implements Instruccion {
 	name: string;
 	type: TypeElement;
 	slashes: number;
-	filters: Filter[];
+	filters: Operation;
 
 	constructor(
 		name: string,
 		type: TypeElement,
-		filters: Filter[],
+		filters: Operation,
 		line: number,
 		column: number
 	) {

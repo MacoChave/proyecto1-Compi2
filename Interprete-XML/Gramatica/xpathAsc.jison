@@ -18,11 +18,18 @@ stringliteral                       \"{stringdouble}*\"
 "node"                                                  return 'resNode'
 "text"                                                  return 'resText'
 "position"                                              return 'resPosition'
+"parent"                                                return 'resParent'
 "child"                                                 return 'resChild'
+"self"                                                  return 'resSelf'
+"preceding"                                             return 'resPrec'
+"preceding-sibling"                                     return 'resPrecSibling'
 "attribute"                                             return 'resAttribute'
-"descendant"                                            return 'resDescendant'
-"ancestor"                                              return 'resAncestor'
-"ancestor-or-self"                                      return 'resAncestorSelf'
+"descendant"                                            return 'resDesc'
+"descendant-or-self"                                    return 'resDescSelf'
+"ancestor"                                              return 'resAnc'
+"ancestor-or-self"                                      return 'resAncSelf'
+"folowing"                                              return 'resFollow'
+"folowing-sibling"                                      return 'resFollowSibling'
 "div"                                                   return 'opDiv'
 "mod"                                                   return 'opMod'
 "or"                                                    return 'oPor'
@@ -39,6 +46,8 @@ stringliteral                       \"{stringdouble}*\"
 "/"                                                     return 'div'
 "|"                                                     return '|'
 "."                                                     return '.'
+".."                                                    return '..'
+"::"                                                    return '::'
 "@"                                                     return '@'
 "["                                                     return '['
 "]"                                                     return ']'
@@ -210,14 +219,164 @@ SLASH:
 ;
 
 EL :
-        id PRE                  { 
+        id                      { 
+                                    $$ = new Element($1, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: 'id', val: $1, children: []},]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | id PRE                { 
                                     $$ = new Element($1, TypeElement.NODO, $2, 1, @1.first_column) 
                                     var nodo = {
                                         name: 'EL',
                                         val: 'EL',
+                                        children: [{name: 'id', val: $1, children: []},{name: 'PRE', val: $2, children: []}]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resParent '::' id     { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
                                         children: [
-                                            {name: 'id', val: $1, children: []},
-                                            $2.Nodo
+                                            {name: 'resParent', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resChild '::' id      { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resChild', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resSelf '::' id       { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resSelf', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resPrec '::' id       { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resPrec', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resPrecSibling '::' id   { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resPrecSibling', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resAttribute '::' id  { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAttribute', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resDesc '::' id       { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resDesc', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resDescSelf '::' id   { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resDescSelf', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resAnc '::' id        { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAnc', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resAncSelf '::' id    { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAncSelf', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resFollow '::' id     { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resFollow', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
+                                        ]
+                                    }
+                                    $$ = {...$$, Nodo: nodo}
+                                }
+        | resFollowSibling '::' id  { 
+                                    $$ = new Element($3, TypeElement.NODO, undefined, 1, @1.first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resFollowSibling', val: $1, children: []}, 
+                                            {name: 'id', val: $3, children: []}
                                         ]
                                     }
                                     $$ = {...$$, Nodo: nodo}
@@ -231,7 +390,7 @@ EL :
                                     }
                                     $$ = {...$$, Nodo: nodo}
                                 }
-        | '.''.'                    { 
+        | '..'                  { 
                                     $$ = new Element('', TypeElement.PARENT, [], 1, @1.first_column) 
                                     var nodo = {
                                         name: 'EL',
@@ -295,7 +454,7 @@ ATTR_P :
                                     $$ = {...$$, Nodo: nodo}
                                 }
         | '*'                   { 
-                                    $$ = new Element($1, TypeElement.ALL, [], 1, @1.first_column)
+                                    $$ = new Element($1, TypeElement.ALL_ATRIBUTO, [], 1, @1.first_column)
                                     var nodo = {
                                         name: 'ATTR_P',
                                         val: 'ATTR_P',
@@ -318,15 +477,6 @@ PRE :
                                         ]
                                     }
                                     $$ = {...$$, Nodo: nodo}
-                                }
-        |                       { 
-                                    $$ = []
-                                    var nodo = {
-                                        name: 'PRE',
-                                        val: 'PRE',
-                                        children: []
-                                    }
-                                    $$ = {...$$, Nodo: nodo} 
                                 }
         ;
 

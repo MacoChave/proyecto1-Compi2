@@ -9,7 +9,8 @@ bookstore//book
 //@lang -> ENTRA POR ERROR A EL -> id PRE
 
 * Especificaciones de nodos
-  
+** ENTRADAS CON ERROR POR LOS PREDICADOS **
+
 /bookstore/book[1]
 /bookstore/book[1]/title
 /bookstore/book/price[text()]
@@ -22,6 +23,8 @@ bookstore//book
 //title[@lang='en']
 /bookstore/book[price>35.00]
 /bookstore/book[price>35.00]/title
+
+** FIN DE ENTRADAS CON ERROR **
 
 * Seleccionando nodos desconocidos
 

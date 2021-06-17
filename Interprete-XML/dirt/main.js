@@ -49,11 +49,10 @@ class Main {
     }
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
-        console.value = '';
         const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        this.execPath_list(objetos.XPath);
+        // this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -485,13 +484,17 @@ class Main {
                 }
             }
             else if (nodeList[index].type === Element_1.TypeElement.CURRENT) {
-                if (nodeList.length > index + 1)
+                if (nodeList.length > index + 1 &&
+                    nodeList[index + 1].type === Element_1.TypeElement.CURRENT) {
+                    // PARENT
+                }
+                // CURRENT
+                if (nodeList.length > index + 1) {
                     this.searchElement(rootXML, nodeList, index + 1);
+                }
                 else {
                     this.printElement(element);
                 }
-            }
-            else if (nodeList[index].type === Element_1.TypeElement.PARENT) {
             }
         });
     }
