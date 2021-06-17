@@ -20,8 +20,14 @@ export class Main {
 	edgesxpath: any = [];
 	tablaSimbolos: any = '';
 
+	codificacion: string = 'utf-8';
+
 	i: number = 1;
 	j: number = 1;
+
+	equalsIgnoringCase(text, other) {
+		return text.localeCompare(other, undefined, { sensitivity: 'base' }) === 0;
+	}
 
 	ejecutarCodigoXmlAsc(entrada: any) {
 		console.log('ejecutando xmlAsc ...');
@@ -31,15 +37,37 @@ export class Main {
 		const objetos = xmlAsc.parse(entrada);
 		// console.log('**********');
 		console.log(objetos);
+		if(objetos !== undefined && objetos !== null){
+			if(objetos.erroresSemanticos.length > 0 || objetos.erroresSintacticos.length > 0){
+				alert('Existen errores');
+			}
+		}
 		// console.log('**********');
 		this.lista_objetos = objetos.objeto;
 		this.listacst = objetos.nodos;
 		console.log(this.listacst);
 
 		if (this.lista_objetos.length > 1) {
-			console.log(this.getXmlFormat(this.lista_objetos[1]));
+			let flag = false;
+			for (const item of this.lista_objetos[0].listaAtributos) {
+				if (this.equalsIgnoringCase(item.identificador, 'encoding')) {
+					if (this.equalsIgnoringCase(item.valor, 'ASCII')) {
+						this.codificacion = 'ASCII';
+					} else if (this.equalsIgnoringCase(item.valor, 'ISO-8859-1')) {
+						this.codificacion = 'ISO-8859-1';
+					} else {
+						this.codificacion = 'utf-8';
+					}
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				this.codificacion = 'utf-8';
+			}
+			console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[1])));
 		} else {
-			console.log(this.getXmlFormat(this.lista_objetos[0]));
+			console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[0])));
 		}
 
 		window.localStorage.setItem(
@@ -119,6 +147,44 @@ export class Main {
 			etiqueta += '/>';
 		}
 		return etiqueta;
+	}
+
+	escapable = /[\\\"\x00-\x1f\x7f-\uffff]/g
+
+	quote(string) {
+
+		// If the string contains no control characters, no quote characters, and no
+		// backslash characters, then we can safely slap some quotes around it.
+		// Otherwise we must also replace the offending characters with safe escape
+		// sequences.
+
+		this.escapable.lastIndex = 0;
+		return this.escapable.test(string) ?
+			'"' + string.replace(this.escapable, function (a) {
+				let meta = {    // table of character substitutions
+					'\b': '\\b',
+					'\t': '\\t',
+					'\n': '\\n',
+					'\f': '\\f',
+					'\r': '\\r',
+					'"': '\\"',
+					'\\': '\\\\'
+			};
+				var c = meta[a];
+				return typeof c === 'string' ? c :
+					'\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+			}) + '"' :
+			'"' + string + '"';
+	}
+
+	applyCodification(text) {
+		if (this.equalsIgnoringCase(this.codificacion, 'ASCII')) {
+			return this.quote(text);
+		} else if (this.equalsIgnoringCase(this.codificacion, 'ISO-8859-1')) {
+			return unescape(encodeURIComponent(text));
+		} else {
+			return text;
+		}
 	}
 
 	readFile(e: any) {
@@ -660,7 +726,7 @@ export class Main {
 		let xmlcst = document.getElementById('arbolcst');
 		if (xmlcst !== undefined && xmlcst !== null) {
 			console.log('btn arbol cst Activo');
-			xmlcst.addEventListener('click', () => {});
+			xmlcst.addEventListener('click', () => { });
 		}
 	}
 }
